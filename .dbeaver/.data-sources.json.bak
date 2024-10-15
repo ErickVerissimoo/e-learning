@@ -1,0 +1,38 @@
+{
+	"folders": {},
+	"connections": {
+		"mariaDB-1928d92f154-597bbefa442e2acd": {
+			"provider": "mysql",
+			"driver": "mariaDB",
+			"name": "elearning",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "3307",
+				"database": "elearning",
+				"url": "jdbc:mariadb://localhost:3307/teste",
+				"configurationType": "MANUAL",
+				"home": "/usr",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Desenvolvimento",
+			"color": "255,255,255",
+			"description": "Banco de dados de desenvolvimento",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": true,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800,
+			"auto-close-connections": true,
+			"close-connections-period": 14400
+		}
+	}
+}
