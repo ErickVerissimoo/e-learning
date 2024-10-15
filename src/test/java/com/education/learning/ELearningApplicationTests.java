@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.education.learning.model.aluno;
-import com.education.learning.model.alunoRepository;
+import com.education.learning.model.aluno.Aluno;
+import com.education.learning.model.aluno.alunoRepository;
 
 @SpringBootTest
 class ELearningApplicationTests {
@@ -15,7 +15,7 @@ class ELearningApplicationTests {
 	private alunoRepository rep;
 	@Test
 	void teste() {
-		List<aluno> alunoS = rep.findAll();
+		List<Aluno> alunoS = rep.findAll();
 		alunoS.forEach(System.out::println);
 	}
 
