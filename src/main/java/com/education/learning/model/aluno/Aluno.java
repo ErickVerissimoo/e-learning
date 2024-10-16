@@ -2,8 +2,6 @@ package com.education.learning.model.aluno;
 
 import java.util.Set;
 
-import org.springframework.stereotype.Component;
-
 import com.education.learning.model.curso.Curso;
 
 import jakarta.persistence.Entity;
@@ -11,11 +9,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Component
-@Data
+@Builder
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Aluno {
 	
 	private String nome;
@@ -25,5 +28,6 @@ public class Aluno {
 	@OneToMany
 	private Set<Curso> curso;
 	private String identificacao;
+	private String email;
 	
 }

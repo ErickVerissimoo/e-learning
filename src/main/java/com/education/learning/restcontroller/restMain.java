@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.education.learning.model.aluno.Aluno;
@@ -15,42 +15,63 @@ import com.education.learning.model.aluno.alunoService;
 @RestController
 public class restMain {
 
-	
-	
 	@Autowired
 	alunoService rep;
-	@Autowired
-	private Aluno aluns;
 	
+
 	@PostMapping(value = "/Cadastrar")
-	@ResponseBody
-	public ResponseEntity<String> Adicionar(@RequestParam(name = "nome") String nome){
+	public ResponseEntity<String> Adicionar(@RequestParam("nome") String nome, @RequestParam("email") String email) {
+
 		
-		aluns.setNome(nome);
-		rep.Adicionar(aluns);
+		rep.Cadastrar(Aluno.builder().nome(nome).email(email).build());
 		return new ResponseEntity<>("Aluno adicionado", HttpStatus.ACCEPTED);
-		
+
 	}
-	
-	@DeleteMapping(value ="*/Deletar")
-	public ResponseEntity<String> deleletar(@RequestParam(required = true) String identificador){
-		
-		if(identificador.matches("^[0-9]+") && identificador.matches(".*[abd].*")){
-			
-		}else if(identificador.matches("^[0-9]+$")) {
-			
-		}else {
-			return new ResponseEntity<>("ID inválido ou não encontrado", ResponseEntity.badRequest().build().getStatusCode());
-			
-			
+
+	@DeleteMapping(value = "/Deletar")
+	public ResponseEntity<String> deleletar(@RequestParam("identificador") String identificador) {
+
+		if (identificador.matches(".*[0-9].*") && identificador.matches(".*[abd].*")) {
+			System.out.println("Funcionario");
+		} else if (identificador.matches("^[0-9]+")) {
+			System.out.println("Usuario");
+		} else {
+			return new ResponseEntity<>("ID inválido ou não encontrado",
+					ResponseEntity.badRequest().build().getStatusCode());
+
 		}
-		
-		
-		
-		
-		
-		
+
 		return new ResponseEntity<>("Usuario deletado", ResponseEntity.ok("Deletado").getStatusCode());
 	}
+	@PutMapping("*/Alterar")
+	public ResponseEntity<String> alterar(@RequestParam(required = false) String identificador){
+		if (identificador.matches("^[0-9]+") && identificador.matches(".*[abd].*")) {
+
+		} else if (identificador.matches("^[0-9]+$")) {
+
+		} else {
+			return new ResponseEntity<>("ID inválido ou não encontrado",
+					ResponseEntity.badRequest().build().getStatusCode());
+			
+		}
+		return new ResponseEntity<>("Alterado",  ResponseEntity.accepted().build().getStatusCode());
+		
+	}
+	
+	@PostMapping("*/Login")
+	public ResponseEntity<String> login(@RequestParam(required = false) String identificador, @RequestParam(required = true) String senha){
+		if (identificador.matches("^[0-9]+") && identificador.matches(".*[abd].*")) {
+			
+		} else if (identificador.matches("^[0-9]+$")) {
+			
+		} else {
+			return new ResponseEntity<>("ID inválido ou não encontrado",
+					ResponseEntity.badRequest().build().getStatusCode());
+
+		}
+		return new ResponseEntity<>("Alterado",  ResponseEntity.accepted().build().getStatusCode());
+		
+	}
+	
 	
 }
