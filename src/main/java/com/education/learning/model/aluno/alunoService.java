@@ -41,11 +41,11 @@ public class alunoService {
 		}
 	}
 	public void AtualizarEmail(String id, String email) {
-		repo.updateEmail(email, id);
+		repo.updateEmail(email ,Long.parseLong(id));
 	}
 	
 	
-	public Boolean Validar(String email, String senha) {
+	public Boolean isValid(String email, String senha) {
 		return repo.Validar(email, senha) != null; 
 	}
 }

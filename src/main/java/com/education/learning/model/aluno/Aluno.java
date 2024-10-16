@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -29,5 +30,6 @@ public class Aluno {
 	private Set<Curso> curso;
 	private String identificacao;
 	private String email;
+	private String senha;
 	
 }

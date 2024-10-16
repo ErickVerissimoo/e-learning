@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
@@ -21,4 +22,6 @@ public class Curso {
 	private String nome;
 	@ManyToOne
 	private Aluno aluno;
+	@Lob
+	private byte[] dados;
 }
