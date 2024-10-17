@@ -19,8 +19,8 @@ public class subadminService {
 	public subadmin Retornar(String id) {
 		return repo.findById(Integer.parseInt(id)).orElseThrow(() -> new NoSuchElementException("Elemento não encontrado"));
 	}
-	public void atualizarNome(String id, String nome) {
-		var admin = this.Retornar(id);
+	public void Cadastrar(subadmin admin) {
+		repo.save(admin);
 		
 	}
 	

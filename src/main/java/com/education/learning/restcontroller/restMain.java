@@ -1,6 +1,6 @@
 package com.education.learning.restcontroller;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,6 +19,8 @@ import com.education.learning.model.aluno.Aluno;
 import com.education.learning.model.aluno.alunoService;
 import com.education.learning.model.curso.Curso;
 import com.education.learning.model.curso.cursoService;
+import com.education.learning.model.subadmin.subadmin;
+import com.education.learning.model.subadmin.subadminService;
 
 @RestController
 public final class restMain {
@@ -27,10 +29,16 @@ public final class restMain {
 	private alunoService rep;
 	@Autowired
 	private cursoService serv;
+	@Autowired
+	private subadminService sub;
 	@PostMapping(value = "/Cadastrar")
-	public ResponseEntity<String> Adicionar(@RequestParam("nome") String nome, @RequestParam("email") String email) {
+	public ResponseEntity<String> Adicionar(@RequestParam("nome") String nome, @RequestParam("email") String email, @RequestParam("tipo") String tipo) {
+		if(tipo.equalsIgnoreCase(Aluno.getTipo())) {
+			rep.Cadastrar(Aluno.builder().nome(nome).email(email).build());
 
-		rep.Cadastrar(Aluno.builder().nome(nome).email(email).build());
+		}else if(tipo.equalsIgnoreCase(subadmin.getTipo())) {
+			sub.Cadastrar(subadmin.builder().nome(nome).email(email).build());
+		}
 		return new ResponseEntity<>("Aluno adicionado", HttpStatus.ACCEPTED);
 
 	}
@@ -76,7 +84,8 @@ if(	rep.isValid(email, senha)) {
 	
 	@PostMapping("/CursoAdd")
 	public String uploadCurso(@RequestParam("file") MultipartFile file) throws IllegalStateException, IOException {
-		serv.gravar(file.getBytes(), new Curso());
+		ByteArrayInputStream bites = new ByteArrayInputStream(file.getBytes());
+		serv.gravar(bites.readAllBytes(), new Curso());
 		return "Curso salvo";
 	}
 	@GetMapping("/AssistirVideo")

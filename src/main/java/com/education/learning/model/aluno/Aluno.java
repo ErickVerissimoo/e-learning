@@ -1,14 +1,13 @@
 package com.education.learning.model.aluno;
 
 import java.util.Set;
-
 import com.education.learning.model.curso.Curso;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,5 +30,8 @@ public class Aluno {
 	private String identificacao;
 	private String email;
 	private String senha;
+	@Getter
+	@Transient
+	private static final String tipo = "funcionario";
 	
 }
