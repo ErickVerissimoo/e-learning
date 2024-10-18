@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.education.learning.model.IUser;
 import com.education.learning.model.aluno.Aluno;
 import com.education.learning.model.aluno.alunoService;
 import com.education.learning.model.curso.Curso;
@@ -39,7 +40,7 @@ public final class restMain {
 		}else if(tipo.equalsIgnoreCase(subadmin.getTipo())) {
 			sub.Cadastrar(subadmin.builder().nome(nome).email(email).build());
 		}
-		return new ResponseEntity<>("Aluno adicionado", HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(tipo + " adicionado", HttpStatus.ACCEPTED);
 
 	}
 
@@ -67,13 +68,18 @@ public final class restMain {
 	}
 
 	@PostMapping("/Login")
-	public ResponseEntity<String> login(@RequestParam("email") String email,
-			@RequestParam(required = false) String identificador, @RequestParam(required = true) String senha) {
-if(	rep.isValid(email, senha)) {
+	public ResponseEntity<Object> login(@RequestParam("email") String email,
+			@RequestParam(required = true) String identificador, @RequestParam(required = true) String senha) {
 	
-}
-	
+		if (identificador.matches(".*[0-9].*") && identificador.matches(".*[abd].*")) {
+			return new ResponseEntity<>(sub.Retornar(identificador, email, senha), ResponseEntity.ok("aceito").getStatusCode());
+		} else if (identificador.matches("^[0-9]+")) {
+return new ResponseEntity<>(rep.retornar(null));
+} else {
+			return new ResponseEntity<>("ID inválido ou não encontrado",
+					ResponseEntity.badRequest().build().getStatusCode());
 
+		}
 		return new ResponseEntity<>("Alterado", ResponseEntity.accepted().build().getStatusCode());
 
 	}

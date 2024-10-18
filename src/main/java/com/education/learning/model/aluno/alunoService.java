@@ -8,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class alunoService {
+public class alunoService   {
 	@Autowired
 	private alunoRepository repo;
-
+	public Aluno retornar(Long id) {
+		return  repo.findById(id).orElseThrow(() -> new NoSuchElementException("Não encontrado"));
+	}
+	
+	
 	public List<Aluno> allAlunos() {
 		return repo.findAll();
 	}
@@ -48,4 +52,6 @@ public class alunoService {
 	public Boolean isValid(String email, String senha) {
 		return repo.Validar(email, senha) != null; 
 	}
+
+	
 }

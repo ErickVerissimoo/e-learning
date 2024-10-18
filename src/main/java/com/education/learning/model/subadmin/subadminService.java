@@ -1,13 +1,12 @@
 package com.education.learning.model.subadmin;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class subadminService {
+public class subadminService  {
 	@Autowired
 	private subadminRepository repo;
 	
@@ -23,5 +22,15 @@ public class subadminService {
 		repo.save(admin);
 		
 	}
+	
+	public boolean isValid(String identificacao, String email, String senha) {
+		return repo.Validar(identificacao, email, senha) !=null;
+	}
+	
+	public subadmin Retornar(String identificacao, String email, String senha) {
+		return repo.Retornar(identificacao, email, senha);
+	}
+	
+	
 	
 }

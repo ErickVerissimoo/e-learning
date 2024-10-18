@@ -1,7 +1,10 @@
 package com.education.learning.model.aluno;
 
 import java.util.Set;
+
+import com.education.learning.model.IUser;
 import com.education.learning.model.curso.Curso;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,13 +16,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 @Entity
 @Builder
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Aluno {
+public class Aluno implements IUser  {
 	
 	private String nome;
 	@Id
@@ -33,5 +35,6 @@ public class Aluno {
 	@Getter
 	@Transient
 	private static final String tipo = "funcionario";
+
 	
 }
