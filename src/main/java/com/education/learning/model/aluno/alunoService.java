@@ -14,8 +14,8 @@ public class alunoService   {
 	public Aluno retornar(Long id) {
 		return  repo.findById(id).orElseThrow(() -> new NoSuchElementException("Não encontrado"));
 	}
-	
-	
+
+
 	public List<Aluno> allAlunos() {
 		return repo.findAll();
 	}
@@ -35,10 +35,10 @@ public class alunoService   {
 		String fine = new String(builder);
 		return fine;
 	}
-	
+
 	public void DeletarAluno(String id) {
 		if(repo.existsById(Long.parseLong(id))) {
-		
+
 		repo.deleteById(Long.parseLong(id));}
 		else {
 			throw new NoSuchElementException("Usuario não existe");
@@ -47,11 +47,15 @@ public class alunoService   {
 	public void AtualizarEmail(String id, String email) {
 		repo.updateEmail(email ,Long.parseLong(id));
 	}
-	
-	
-	public Boolean isValid(String email, String senha) {
-		return repo.Validar(email, senha) != null; 
-	}
 
-	
+
+	public Boolean isValid(String email, String senha, String identificacao) {
+		return repo.Validar(email, senha, identificacao) != null;
+	}
+	public Aluno Voltar(String email, String senha, String identificacao) {
+		return repo.Validar(email, senha, identificacao);
+	}
+	public Aluno getInstance(String email, String senha, String nome) {
+		return new Aluno(email, null, null, senha, nome, null);
+	}
 }

@@ -1,6 +1,5 @@
 package com.education.learning.model.curso;
 
-import java.io.InputStream;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;

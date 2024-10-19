@@ -2,18 +2,16 @@ package com.education.learning.model.aluno;
 
 import java.util.Set;
 
-import com.education.learning.model.IUser;
 import com.education.learning.model.curso.Curso;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 @Entity
@@ -21,20 +19,19 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Aluno implements IUser  {
-	
+@SuppressWarnings("unused")
+public class Aluno {
+
 	private String nome;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@OneToMany
+	@Nullable
 	private Set<Curso> curso;
 	private String identificacao;
 	private String email;
 	private String senha;
-	@Getter
-	@Transient
-	private static final String tipo = "funcionario";
 
-	
+
 }
