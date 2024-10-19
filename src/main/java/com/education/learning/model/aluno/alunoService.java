@@ -26,7 +26,7 @@ public class alunoService   {
 		repo.save(aluno);
 	}
 
-	private static String gerarIdentificador() {
+	 public static String gerarIdentificador() {
 		SecureRandom random = new SecureRandom();
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < 10; i++) {
@@ -44,6 +44,7 @@ public class alunoService   {
 			throw new NoSuchElementException("Usuario não existe");
 		}
 	}
+
 	public void AtualizarEmail(String id, String email) {
 		repo.updateEmail(email ,Long.parseLong(id));
 	}
@@ -55,7 +56,7 @@ public class alunoService   {
 	public Aluno Voltar(String email, String senha, String identificacao) {
 		return repo.Validar(email, senha, identificacao);
 	}
-	public Aluno getInstance(String email, String senha, String nome) {
-		return new Aluno(email, null, null, senha, nome, null);
+	public void DeletarIdentificador(String identificador) {
+		repo.DeleteByIdentificador(identificador);
 	}
 }

@@ -1,5 +1,6 @@
 package com.education.learning.model.curso;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,4 +18,8 @@ public void gravar(byte[] file, Curso video) {
 public Curso RetornarVideo(String id) {
 	return rep.findById(Long.parseLong(id)).orElseThrow(() -> new NoSuchElementException("Não encontrado"));
 }
+public List<Curso> procura(String nome){
+	return rep.findByNome("%"+nome+"%");
+}
+
 }

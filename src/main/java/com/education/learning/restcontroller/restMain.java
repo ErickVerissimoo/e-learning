@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.education.learning.model.aluno.Aluno;
 import com.education.learning.model.aluno.alunoService;
 import com.education.learning.model.curso.Curso;
 import com.education.learning.model.curso.cursoService;
+import com.education.learning.model.subadmin.subadmin;
 import com.education.learning.model.subadmin.subadminService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,18 +39,21 @@ public final class restMain {
 
 	@PostMapping(value = { "/Usuario/Cadastrar", "/Funcionarios/Cadastrar" })
 	public ResponseEntity<String> Adicionar(@RequestParam(name = "nome", required = true) String nome,
-			@RequestParam(name = "email", required = true) String email, @RequestParam(value = "senha", required= true) String senha,
+			@RequestParam(name = "email", required = true) String email,
+			@RequestParam(value = "senha", required = true) String senha,
 
 			@NotNull HttpServletRequest requisicao) {
 
 		if (requisicao.getRequestURI().equals("/Usuario/Cadastrar")) {
-			rep.Cadastrar(rep.getInstance(email, senha, nome));
+			rep.Cadastrar(Aluno.builder().nome(nome).email(email).senha(senha).build());
 
 		}
 
 		else if (requisicao.getRequestURI().equals("/Funcionarios/Cadastrar")) {
-			System.out.println(requisicao.getRequestURI());
+			sub.Cadastrar(subadmin.builder().nome(nome).email(email).senha(senha).build());
 
+		} else {
+			throw new ResourceAccessException("Recurso não encontrado");
 		}
 
 		return new ResponseEntity<>(" adicionado", HttpStatus.ACCEPTED);
@@ -58,12 +63,12 @@ public final class restMain {
 	@DeleteMapping(value = { "/Usuario/Deletar", "/Funcionario/Deletar" })
 	public ResponseEntity<String> deleletar(
 			@RequestParam(name = "identificador", required = false) String identificador,
-			@RequestParam(required = true) String id) {
+			@RequestParam(required = true) String id, HttpServletRequest req) {
 
-		if (identificador != null && identificador.matches(".*[0-9].*") && identificador.matches(".*[abd].*")) {
+		if (req.getRequestURI().equals("/UsuarioDeletar")) {
 			System.out.println("Funcionario");
 		} else if (identificador != null && identificador.matches("^[0-9]+")) {
-			System.out.println("Usuario");
+			rep.DeletarIdentificador(identificador);
 		} else if (id != null) {
 			rep.DeletarAluno(id);
 		}
@@ -77,14 +82,14 @@ public final class restMain {
 		return new ResponseEntity<>("Usuario deletado", ResponseEntity.ok("Deletado").getStatusCode());
 	}
 
-	@PutMapping("/Alterar")
+	@PutMapping(value = {"/Usuario/Alterar", "/Funcionario/deletar"})
 	public ResponseEntity<String> alterar(@RequestParam(required = true) String identificador) {
 
 		return new ResponseEntity<>("Alterado", ResponseEntity.accepted().build().getStatusCode());
 
 	}
 
-	@PostMapping("/Login")
+	@PostMapping("/Home/Login")
 	public ResponseEntity<Object> login(@RequestParam("email") String email,
 			@RequestParam(required = true) String identificador, @RequestParam(required = true) String senha) {
 
@@ -108,7 +113,8 @@ public final class restMain {
 		return rep.allAlunos();
 	}
 
-	@PostMapping("/CursoAdd")
+	@PostMapping("/Subadmin/CursoAdd")
+	@ResponseStatus(code = HttpStatus.OK)
 	public String uploadCurso(@RequestParam("file") MultipartFile file) throws IllegalStateException, IOException {
 		ByteArrayInputStream bites = new ByteArrayInputStream(file.getBytes());
 		serv.gravar(bites.readAllBytes(), new Curso());
@@ -116,9 +122,13 @@ public final class restMain {
 	}
 
 	@GetMapping("/Home/AssistirCurso")
-	@ResponseStatus(code = HttpStatus.FOUND)
+	@ResponseStatus(code = HttpStatus.ACCEPTED)
 	public byte[] assistir(@RequestParam("id") String id) {
 		return serv.RetornarVideo(id).getDados();
 	}
-
+@GetMapping("/Home/Procurar")
+@ResponseStatus(code = HttpStatus.FOUND)
+public List<Curso> procura(@RequestParam(name = "nome") String nome){
+	return serv.procura(nome);
+}
 }
