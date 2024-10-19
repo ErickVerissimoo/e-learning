@@ -14,7 +14,10 @@ public class alunoService   {
 	public Aluno retornar(Long id) {
 		return  repo.findById(id).orElseThrow(() -> new NoSuchElementException("Não encontrado"));
 	}
-
+public void AlterarDados(String identificador, String senha, String
+		senhaAtual, String senhaNOVA) {
+	
+}
 
 	public List<Aluno> allAlunos() {
 		return repo.findAll();
@@ -50,8 +53,13 @@ public class alunoService   {
 	}
 
 
-	public Boolean isValid(String email, String senha, String identificacao) {
-		return repo.Validar(email, senha, identificacao) != null;
+	public Boolean isAluno(String email, String senha, String identificacao) {
+		if(identificacao == null || identificacao.isEmpty()) {
+			return false;
+		}
+		
+		String regex = "^\\d{10}$";
+		return repo.Validar(email, senha, identificacao) != null && identificacao.matches(regex);
 	}
 	public Aluno Voltar(String email, String senha, String identificacao) {
 		return repo.Validar(email, senha, identificacao);

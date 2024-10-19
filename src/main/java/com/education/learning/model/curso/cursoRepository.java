@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface cursoRepository extends JpaRepository<Curso, Long>{
 	@Query("SELECT p FROM Curso p WHERE p.nome LIKE :nome")
 	List<Curso> findByNome(@Param("nome") String nome);
-
+	@Query("Select p from Curso p Where p.nome=:nome")
+	Curso curso (@Param("nome") String nome);
 }

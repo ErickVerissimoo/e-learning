@@ -28,8 +28,10 @@ public class subadminService  {
 
 	}
 
-	public boolean isValid(String identificacao, String email, String senha) {
-		return repo.Validar(identificacao, email, senha) !=null;
+	public boolean isSubadmin(String identificacao, String email, String senha) {
+	    String regex = "^(?=.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d)(?=[^abcdefg]*[abcdefg]{2}$).*";
+		
+		return repo.Validar(identificacao, email, senha) !=null && identificacao.matches(regex);
 	}
 
 	public subadmin Retornar(String identificacao, String email, String senha) {
@@ -39,7 +41,7 @@ private static String geraridentificador() {
 	StringBuilder builder = new StringBuilder(gerarIdentificador());
 	String abd = "abcdefg";
 	SecureRandom random = new SecureRandom();
-	for(int i =0; i<abd.length();i++) {
+	for(int i =0; i<=3;i++) {
 		builder.append(abd.charAt(random.nextInt(0, abd.length())));
 	}
 	return new String(builder);

@@ -21,5 +21,7 @@ public Curso RetornarVideo(String id) {
 public List<Curso> procura(String nome){
 	return rep.findByNome("%"+nome+"%");
 }
-
+	public Curso cursoDados(String nome) {
+		return rep.curso(nome);
+	}
 }

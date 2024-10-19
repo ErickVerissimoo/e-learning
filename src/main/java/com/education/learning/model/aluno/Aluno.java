@@ -4,12 +4,14 @@ import java.util.Set;
 
 import com.education.learning.model.curso.Curso;
 
-import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -26,10 +28,13 @@ public class Aluno {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@OneToMany
-	@Nullable
+	@ManyToMany(fetch = FetchType.LAZY)
+	@Column(nullable = true)
 	private Set<Curso> curso;
+	@Column(updatable = false, unique = true)
 	private String identificacao;
+	@Email(message = "Email inválido")
+	@Column(unique = true, updatable = true)
 	private String email;
 	private String senha;
 
