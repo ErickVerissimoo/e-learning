@@ -23,10 +23,10 @@ public class subadminService implements userService<Subadmin, String>  {
 
 	@Override
 	public void Cadastrar(Subadmin admin) throws EntityNotFoundException {
-	
-		
-		
-		
+
+
+
+
 		admin.setIdentificacao(geraridentificador());
 		repo.save(admin);
 
@@ -34,7 +34,7 @@ public class subadminService implements userService<Subadmin, String>  {
 
 	public boolean isSubadmin(String identificacao, String email, String senha) {
 	    String regex = "^(?=.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d)(?=[^abcdefg]*[abcdefg]{2}$).*";
-	    
+
 		return repo.Validar(identificacao, email, senha) !=null && identificacao.matches(regex);
 	}
 
@@ -46,28 +46,24 @@ public class subadminService implements userService<Subadmin, String>  {
 		builder.append(abd.charAt(random.nextInt(0, abd.length())));
 	}
 	return new String(builder);
-} 
-
-
-
-
-@Override
-public void Atualizar(Subadmin entity) throws EntityNotFoundException {
-	// TODO Auto-generated method stub
-	
 }
+
+
+
+
+
 
 @Override
 public List<Subadmin> getAll() {
-	
+
 	return repo.findAll();
 }
 
 
 @Override
 public boolean Login(String email, String senha, String identificador) {
-	
-	return repo.Validar(identificador, email, senha) !=null && this.isSubadmin(identificador, email, senha) ==true;
+
+	return repo.Validar(identificador, email, senha) !=null && this.isSubadmin(identificador, email, senha);
 }
 
 
@@ -80,8 +76,14 @@ public Subadmin Buscar(String id) throws EntityNotFoundException {
 
 @Override
 public Subadmin entrar(String email, String senha, String identificador) {
-	
+
 	return repo.Validar(identificador, email, senha);
+}
+
+@Override
+public void Atualizar(Subadmin entity) throws EntityNotFoundException {
+	// TODO Auto-generated method stub
+
 }
 
 

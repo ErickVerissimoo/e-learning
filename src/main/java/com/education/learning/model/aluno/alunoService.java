@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.education.learning.model.superclass.userService;
 
 import jakarta.persistence.EntityNotFoundException;
-import lombok.experimental.var;
 
 @Service
 public class alunoService implements userService<Aluno, String>   {
@@ -24,7 +23,8 @@ public class alunoService implements userService<Aluno, String>   {
 public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 
 }
-	
+
+	@Override
 	public void Cadastrar(Aluno aluno) {
 		String identificador = gerarIdentificador();
 		aluno.setIdentificacao(identificador);
@@ -55,8 +55,8 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 		String regex = "^\\d{10}$";
 		return repo.Validar(email, senha, identificacao) != null && identificacao.matches(regex);
 	}
-	
-	
+
+
 	@Override
 	public void Deletar(String id) throws EntityNotFoundException {
 		if(repo.existsById(Long.parseLong(id))) {
@@ -64,29 +64,28 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 			repo.deleteById(Long.parseLong(id));}
 			else {
 				throw new NoSuchElementException("Usuario não existe");
-			}		
+			}
 	}
 	@Override
 	public Aluno Buscar(String id) throws EntityNotFoundException {
 
 		return repo.findById(Long.parseLong(id)).orElseThrow();
 	}
-	
+
 	@Override
 	public List<Aluno> getAll() {
-		
+
 		return repo.findAll();
 	}
 
 	@Override
 	public Aluno entrar(String email, String senha, String identificador) {
 		Optional<Aluno> teste = Optional.of(repo.Validar(email, senha, identificador));
-		
+
 		return teste.orElseThrow();
 	}
 	@Override
 	public boolean Login(String email, String senha, String identificador) {
-		// TODO Auto-generated method stub
 		return repo.Validar(email, senha, identificador)!=null && this.isAluno(email, senha, identificador);
 	}
 }

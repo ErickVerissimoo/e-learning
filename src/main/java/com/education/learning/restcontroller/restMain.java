@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.education.learning.model.DTOs.AlunoDTO;
+import com.education.learning.model.DTOs.subadminDTO;
 import com.education.learning.model.aluno.Aluno;
 import com.education.learning.model.aluno.alunoService;
 import com.education.learning.model.curso.Curso;
@@ -41,19 +44,17 @@ public final class restMain {
 	private subadminService sub;
 
 	@PostMapping(value = { "/cadastrar", "/colaborador/cadastrar" })
-	public final ResponseEntity<String> Adicionar(@RequestParam(name = "nome", required = true) String nome,
-			@RequestParam(name = "email", required = true) String email,
-			@RequestParam(value = "senha", required = true) String senha,
-
+	public final ResponseEntity<String> Adicionar(@RequestBody(required = false) AlunoDTO alunoDTO,
+			@RequestBody(required= false) subadminDTO subadminDTO,
 			@NotNull HttpServletRequest requisicao) {
 
 		if (requisicao.getRequestURI().equals("/cadastrar")) {
-			rep.Cadastrar(Aluno.builder().nome(nome).email(email).senha(senha).build());
+			rep.Cadastrar(Aluno.builder().nome(alunoDTO.getNome()).email(alunoDTO.getEmail()).senha(alunoDTO.getSenha()).build());
 
 		}
 
 		else if (requisicao.getRequestURI().equals("/funcionarios/cadastrar")) {
-			sub.Cadastrar(Subadmin.builder().nome(nome).email(email).senha(senha).build());
+			sub.Cadastrar(Subadmin.builder().nome(subadminDTO.getNome()).email(subadminDTO.getEmail()).senha(subadminDTO.getSenha()).build());
 
 		} else {
 			throw new UnsupportedOperationException("Cadastro inválido");
@@ -86,10 +87,13 @@ public final class restMain {
 	@PutMapping(value = { "/usuario/alterar", "/funcionario/deletar" })
 	public ResponseEntity<String> alterar(HttpServletRequest req,
 			@RequestParam(name = "identificador", required = true) String identificador,
-			@RequestParam(name = "email", required = false) String email,
+			@RequestParam(name = "email", required = false) String email, @RequestParam("emailNovo") String novoEmail,
 			@RequestParam(name = "senha", required = true) String senhaAtual,
 			@RequestParam(name = "senhaNova", required = false) String senhaNova) {
 		if (req.getRequestURI().equals("/usuario/alterar")) {
+			Aluno alunoDadosAtuais = Aluno.builder().email(email).senha(senhaAtual).identificacao(identificador).build();
+			rep.Atualizar(alunoDadosAtuais);
+
 
 		} else if (req.getRequestURI().equals("/funcionario/deletar")) {
 
@@ -98,12 +102,12 @@ public final class restMain {
 
 	}
 
-	@PostMapping("*/Login")
+	@PostMapping("/Login")
 	public ResponseEntity<Usuario> login(@RequestParam("email") String email,
 			@RequestParam(name = "identificador", required = true) String identificador,
 			@RequestParam(name = "senha", required = true) String senha) {
 
-		if (sub.Login(email, senha, identificador) == true) {
+		if (sub.Login(email, senha, identificador)) {
 			return new ResponseEntity<>(sub.entrar(identificador, email, senha),
 					ResponseEntity.ok("aceito").getStatusCode());
 		} else if (rep.Login(email, senha, identificador)) {
