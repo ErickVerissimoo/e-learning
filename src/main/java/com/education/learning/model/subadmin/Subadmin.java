@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @SuperBuilder
-public final class subadmin extends Usuario {
+public final class Subadmin extends Usuario {
 
 
 }

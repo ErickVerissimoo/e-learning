@@ -24,11 +24,7 @@ public class alunoService implements userService<Aluno, String>   {
 public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 
 }
-
-	public List<Aluno> allAlunos() {
-		return repo.findAll();
-	}
-
+	
 	public void Cadastrar(Aluno aluno) {
 		String identificador = gerarIdentificador();
 		aluno.setIdentificacao(identificador);
@@ -45,14 +41,6 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 		return fine;
 	}
 
-	public void DeletarAluno(String id) {
-		if(repo.existsById(Long.parseLong(id))) {
-
-		repo.deleteById(Long.parseLong(id));}
-		else {
-			throw new NoSuchElementException("Usuario não existe");
-		}
-	}
 
 	public void AtualizarEmail(String id, String email) {
 		repo.updateEmail(email ,Long.parseLong(id));
@@ -71,19 +59,23 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 	
 	@Override
 	public void Deletar(String id) throws EntityNotFoundException {
-		// TODO Auto-generated method stub
-		
+		if(repo.existsById(Long.parseLong(id))) {
+
+			repo.deleteById(Long.parseLong(id));}
+			else {
+				throw new NoSuchElementException("Usuario não existe");
+			}		
 	}
 	@Override
 	public Aluno Buscar(String id) throws EntityNotFoundException {
-		// TODO Auto-generated method stub
+
 		return repo.findById(Long.parseLong(id)).orElseThrow();
 	}
 	
 	@Override
 	public List<Aluno> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return repo.findAll();
 	}
 
 	@Override

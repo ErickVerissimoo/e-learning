@@ -2,7 +2,6 @@ package com.education.learning.model.subadmin;
 
 import static com.education.learning.model.aluno.alunoService.gerarIdentificador;
 
-import java.lang.reflect.Field;
 import java.security.SecureRandom;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import com.education.learning.model.superclass.userService;
 
 import jakarta.persistence.EntityNotFoundException;
 @Service
-public class subadminService implements userService<subadmin, String>  {
+public class subadminService implements userService<Subadmin, String>  {
 	@Autowired
 	private subadminRepository repo;
 	@Override
@@ -23,7 +22,7 @@ public class subadminService implements userService<subadmin, String>  {
 	}
 
 	@Override
-	public void Cadastrar(subadmin admin) throws EntityNotFoundException {
+	public void Cadastrar(Subadmin admin) throws EntityNotFoundException {
 	
 		
 		
@@ -53,13 +52,13 @@ public class subadminService implements userService<subadmin, String>  {
 
 
 @Override
-public void Atualizar(subadmin entity) throws EntityNotFoundException {
+public void Atualizar(Subadmin entity) throws EntityNotFoundException {
 	// TODO Auto-generated method stub
 	
 }
 
 @Override
-public List<subadmin> getAll() {
+public List<Subadmin> getAll() {
 	
 	return repo.findAll();
 }
@@ -73,14 +72,14 @@ public boolean Login(String email, String senha, String identificador) {
 
 
 @Override
-public subadmin Buscar(String id) throws EntityNotFoundException {
+public Subadmin Buscar(String id) throws EntityNotFoundException {
 
 	return repo.findById(Integer.parseInt(id)).orElseThrow();
 }
 
 
 @Override
-public subadmin entrar(String email, String senha, String identificador) {
+public Subadmin entrar(String email, String senha, String identificador) {
 	
 	return repo.Validar(identificador, email, senha);
 }
