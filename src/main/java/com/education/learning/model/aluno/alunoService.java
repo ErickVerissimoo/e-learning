@@ -16,7 +16,7 @@ public class alunoService   {
 	}
 public void AlterarDados(String identificador, String senha, String
 		senhaAtual, String senhaNOVA) {
-	
+
 }
 
 	public List<Aluno> allAlunos() {
@@ -57,7 +57,7 @@ public void AlterarDados(String identificador, String senha, String
 		if(identificacao == null || identificacao.isEmpty()) {
 			return false;
 		}
-		
+
 		String regex = "^\\d{10}$";
 		return repo.Validar(email, senha, identificacao) != null && identificacao.matches(regex);
 	}

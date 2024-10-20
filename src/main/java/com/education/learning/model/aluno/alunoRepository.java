@@ -17,9 +17,9 @@ public interface alunoRepository extends JpaRepository<Aluno, Long>{
 			 @Param("identificacao") String identificacao);
 	@Modifying @Query("Delete from Aluno p where p.identificacao = :identificacao")
 	void DeleteByIdentificador(@Param("identificacao")String identificacao);
-	
+
 	@Modifying
 	@Query("Update Aluno p SET p.senha=:senhaNova where p.senha=:senha")
 	void updateSenha(@Param("senha") String senhaAtual, @Param("senhaNova") String nova);
-	
+
 }

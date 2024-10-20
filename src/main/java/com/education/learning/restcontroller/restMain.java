@@ -87,15 +87,15 @@ public final class restMain {
 			@RequestParam(name = "identificador", required = true)
 	String identificador,
 			@RequestParam(name = "email", required=false)
-	String email, 
-	@RequestParam(name = "senha", required=true) 
-	String senhaAtual, 
-	@RequestParam(name = "senhaNova", required=false) 
+	String email,
+	@RequestParam(name = "senha", required=true)
+	String senhaAtual,
+	@RequestParam(name = "senhaNova", required=false)
 	String senhaNova) {
 if(req.getRequestURI().equals("/Usuario/Alterar")) {
-	
+
 }else if(req.getRequestURI().equals("/Funcionario/deletar")){
-	
+
 }
 		return new ResponseEntity<>("Alterado", ResponseEntity.accepted().build().getStatusCode());
 
@@ -107,7 +107,7 @@ if(req.getRequestURI().equals("/Usuario/Alterar")) {
 
 		if (sub.isSubadmin(identificador, email, senha))
 				  {
-			return new ResponseEntity<>(sub.Retornar(identificador, email, senha),
+			return new ResponseEntity<>(sub.Buscar(identificador, email, senha),
 					ResponseEntity.ok("aceito").getStatusCode());
 		} else if (rep.isAluno(email, senha, identificador)) {
 			return new ResponseEntity<>(rep.Voltar(email, senha, identificador),
@@ -130,7 +130,7 @@ if(req.getRequestURI().equals("/Usuario/Alterar")) {
 	public String uploadCurso(@RequestParam("file") MultipartFile file) throws IllegalStateException, IOException {
 		ByteArrayInputStream bites = new ByteArrayInputStream(file.getBytes());
 		serv.gravar(bites.readAllBytes(), new Curso());
-		
+
 		return "Curso salvo";
 	}
 

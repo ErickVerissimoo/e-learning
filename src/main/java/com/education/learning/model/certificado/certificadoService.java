@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 public class certificadoService {
 	@Autowired
 	private certificadoRepository rep;
-	
-	
+
+
 }

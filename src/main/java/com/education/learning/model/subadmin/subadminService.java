@@ -7,8 +7,10 @@ import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.education.learning.model.superclass.GenericService;
 @Service
-public class subadminService  {
+public class subadminService implements GenericService<subadmin>  {
 	@Autowired
 	private subadminRepository repo;
 
@@ -30,11 +32,11 @@ public class subadminService  {
 
 	public boolean isSubadmin(String identificacao, String email, String senha) {
 	    String regex = "^(?=.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d)(?=[^abcdefg]*[abcdefg]{2}$).*";
-		
+
 		return repo.Validar(identificacao, email, senha) !=null && identificacao.matches(regex);
 	}
-
-	public subadmin Retornar(String identificacao, String email, String senha) {
+	@Override
+	public subadmin Buscar(String identificacao, String email, String senha) {
 		return repo.Retornar(identificacao, email, senha);
 	}
 private static String geraridentificador() {
@@ -45,6 +47,13 @@ private static String geraridentificador() {
 		builder.append(abd.charAt(random.nextInt(0, abd.length())));
 	}
 	return new String(builder);
+}
+
+
+@Override
+public void Atualizar(String nomeOrEmail, String senha) {
+	// TODO Auto-generated method stub
+	
 }
 
 
