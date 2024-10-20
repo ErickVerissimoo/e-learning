@@ -2,29 +2,32 @@ package com.education.learning.model.subadmin;
 
 import static com.education.learning.model.aluno.alunoService.gerarIdentificador;
 
+import java.lang.reflect.Field;
 import java.security.SecureRandom;
-import java.util.NoSuchElementException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.education.learning.model.superclass.GenericService;
+import com.education.learning.model.superclass.userService;
+
+import jakarta.persistence.EntityNotFoundException;
 @Service
-public class subadminService implements GenericService<subadmin>  {
+public class subadminService implements userService<subadmin, String>  {
 	@Autowired
 	private subadminRepository repo;
-
+	@Override
 	public void Deletar(String id) {
 		repo.deleteById(Integer.parseInt(id));
 
 	}
 
-	public subadmin Retornar(String id) {
-		return repo.findById(Integer.parseInt(id)).orElseThrow(() -> new NoSuchElementException("Elemento não encontrado"));
-	}
-	public void Cadastrar(subadmin admin) {
-
-
+	@Override
+	public void Cadastrar(subadmin admin) throws EntityNotFoundException {
+	
+		
+		
+		
 		admin.setIdentificacao(geraridentificador());
 		repo.save(admin);
 
@@ -32,14 +35,11 @@ public class subadminService implements GenericService<subadmin>  {
 
 	public boolean isSubadmin(String identificacao, String email, String senha) {
 	    String regex = "^(?=.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d.*\\d)(?=[^abcdefg]*[abcdefg]{2}$).*";
-
+	    
 		return repo.Validar(identificacao, email, senha) !=null && identificacao.matches(regex);
 	}
-	@Override
-	public subadmin Buscar(String identificacao, String email, String senha) {
-		return repo.Retornar(identificacao, email, senha);
-	}
-private static String geraridentificador() {
+
+ private final static String geraridentificador() {
 	StringBuilder builder = new StringBuilder(gerarIdentificador());
 	String abd = "abcdefg";
 	SecureRandom random = new SecureRandom();
@@ -47,13 +47,42 @@ private static String geraridentificador() {
 		builder.append(abd.charAt(random.nextInt(0, abd.length())));
 	}
 	return new String(builder);
+} 
+
+
+
+
+@Override
+public void Atualizar(subadmin entity) throws EntityNotFoundException {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public List<subadmin> getAll() {
+	
+	return repo.findAll();
 }
 
 
 @Override
-public void Atualizar(String nomeOrEmail, String senha) {
-	// TODO Auto-generated method stub
+public boolean Login(String email, String senha, String identificador) {
 	
+	return repo.Validar(identificador, email, senha) !=null && this.isSubadmin(identificador, email, senha) ==true;
+}
+
+
+@Override
+public subadmin Buscar(String id) throws EntityNotFoundException {
+
+	return repo.findById(Integer.parseInt(id)).orElseThrow();
+}
+
+
+@Override
+public subadmin entrar(String email, String senha, String identificador) {
+	
+	return repo.Validar(identificador, email, senha);
 }
 
 

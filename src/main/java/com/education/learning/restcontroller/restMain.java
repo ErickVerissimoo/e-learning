@@ -25,6 +25,7 @@ import com.education.learning.model.curso.Curso;
 import com.education.learning.model.curso.cursoService;
 import com.education.learning.model.subadmin.subadmin;
 import com.education.learning.model.subadmin.subadminService;
+import com.education.learning.model.superclass.Usuario;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
@@ -68,7 +69,7 @@ public final class restMain {
 			@RequestParam(required = true) String id, HttpServletRequest req) {
 
 		if (req.getRequestURI().equals("/Usuario/Deletar")) {
-			rep.DeletarIdentificador(identificador);
+			rep.DeletarAluno(identificador);
 		} else if (req.getRequestURI().equals("/Restrito/Funcionario/Deletar")) {
 			sub.Deletar(id);
 		}
@@ -102,20 +103,18 @@ if(req.getRequestURI().equals("/Usuario/Alterar")) {
 	}
 
 	@PostMapping("*/Login")
-	public ResponseEntity<Object> login(@RequestParam("email") String email,
-			@RequestParam(required = true) String identificador, @RequestParam(required = true) String senha) {
+	public ResponseEntity<Usuario> login(@RequestParam("email") String email,
+			@RequestParam(name = "identificador",required = true) String identificador, @RequestParam(name = "senha",required = true) String senha) {
 
-		if (sub.isSubadmin(identificador, email, senha))
+		if (sub.Login(email, senha, identificador)==true)
 				  {
-			return new ResponseEntity<>(sub.Buscar(identificador, email, senha),
+			return new ResponseEntity<>(sub.entrar(identificador, email, senha),
 					ResponseEntity.ok("aceito").getStatusCode());
-		} else if (rep.isAluno(email, senha, identificador)) {
-			return new ResponseEntity<>(rep.Voltar(email, senha, identificador),
-					ResponseEntity.ok("Aceito").getStatusCode());
+		} else if (rep.Login(email, senha, identificador)) {
+			return new ResponseEntity<>(rep.entrar(email, senha, identificador),
+					ResponseEntity.ok("aceito").getStatusCode());
 		} else {
-			return new ResponseEntity<>("ID inválido ou não encontrado",
-					ResponseEntity.badRequest().build().getStatusCode());
-
+		return ResponseEntity.badRequest().build();
 		}
 
 	}

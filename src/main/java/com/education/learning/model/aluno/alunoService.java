@@ -3,19 +3,25 @@ package com.education.learning.model.aluno;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.education.learning.model.superclass.userService;
+
+import jakarta.persistence.EntityNotFoundException;
+import lombok.experimental.var;
+
 @Service
-public class alunoService   {
+public class alunoService implements userService<Aluno, String>   {
 	@Autowired
 	private alunoRepository repo;
 	public Aluno retornar(Long id) {
 		return  repo.findById(id).orElseThrow(() -> new NoSuchElementException("Não encontrado"));
 	}
-public void AlterarDados(String identificador, String senha, String
-		senhaAtual, String senhaNOVA) {
+	@Override
+public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 
 }
 
@@ -61,10 +67,34 @@ public void AlterarDados(String identificador, String senha, String
 		String regex = "^\\d{10}$";
 		return repo.Validar(email, senha, identificacao) != null && identificacao.matches(regex);
 	}
-	public Aluno Voltar(String email, String senha, String identificacao) {
-		return repo.Validar(email, senha, identificacao);
+	
+	
+	@Override
+	public void Deletar(String id) throws EntityNotFoundException {
+		// TODO Auto-generated method stub
+		
 	}
-	public void DeletarIdentificador(String identificador) {
-		repo.DeleteByIdentificador(identificador);
+	@Override
+	public Aluno Buscar(String id) throws EntityNotFoundException {
+		// TODO Auto-generated method stub
+		return repo.findById(Long.parseLong(id)).orElseThrow();
+	}
+	
+	@Override
+	public List<Aluno> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Aluno entrar(String email, String senha, String identificador) {
+		Optional<Aluno> teste = Optional.of(repo.Validar(email, senha, identificador));
+		
+		return teste.orElseThrow();
+	}
+	@Override
+	public boolean Login(String email, String senha, String identificador) {
+		// TODO Auto-generated method stub
+		return repo.Validar(email, senha, identificador)!=null && this.isAluno(email, senha, identificador);
 	}
 }
