@@ -6,5 +6,7 @@ import lombok.experimental.UtilityClass;
 @Description("Classe auxiliar que desafoga o RestController")
 @UtilityClass
 public class mainHelper {
+public void a() {
 
+}
 }

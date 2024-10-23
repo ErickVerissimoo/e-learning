@@ -3,6 +3,7 @@ package com.education.learning.model.aluno;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,8 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 
 
 	public Boolean isAluno(String email, String senha, String identificacao) {
-		if(identificacao == null || identificacao.isEmpty()) {
+		if(Objects.isNull(identificacao)) {
+
 			return false;
 		}
 

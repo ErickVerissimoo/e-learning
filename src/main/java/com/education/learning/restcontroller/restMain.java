@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,10 +32,15 @@ import com.education.learning.model.subadmin.subadminService;
 import com.education.learning.model.superclass.Usuario;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Cleanup;
 
 @RestController
 @RequestMapping(value = "/home")
+@CrossOrigin(origins = "*")
 public final class restMain {
 
 	@Autowired
@@ -43,8 +50,8 @@ public final class restMain {
 	@Autowired
 	private subadminService sub;
 
-	@PostMapping(value = { "/cadastrar", "/colaborador/cadastrar" })
-	public final ResponseEntity<String> Adicionar(@RequestBody(required = false) AlunoDTO alunoDTO,
+	@PostMapping(value = { "/cadastrar", "/colaborador/cadastrar" }, consumes=MediaType.APPLICATION_JSON_VALUE)
+	public final ResponseEntity<String> Adicionar(@Valid @RequestBody(required = false) AlunoDTO alunoDTO,
 			@RequestBody(required= false) subadminDTO subadminDTO,
 			@NotNull HttpServletRequest requisicao) {
 
@@ -64,7 +71,7 @@ public final class restMain {
 
 	}
 
-	@DeleteMapping(value = { "/usuario/deletar", "/funcionarios/deletar" })
+	@DeleteMapping(value = { "/usuario/deletar", "/funcionarios/deletar" }, consumes=MediaType.APPLICATION_JSON_VALUE)
 	public final ResponseEntity<String> deleletar(
 			@RequestParam(name = "identificador", required = false) String identificador,
 			@RequestParam(required = true) String id, HttpServletRequest req) {
@@ -86,12 +93,12 @@ public final class restMain {
 
 	@PutMapping(value = { "/usuario/alterar", "/funcionario/deletar" })
 	public ResponseEntity<String> alterar(HttpServletRequest req,
-			@RequestParam(name = "identificador", required = true) String identificador,
-			@RequestParam(name = "email", required = false) String email, @RequestParam("emailNovo") String novoEmail,
-			@RequestParam(name = "senha", required = true) String senhaAtual,
-			@RequestParam(name = "senhaNova", required = false) String senhaNova) {
+			@RequestBody(required = false) AlunoDTO userDTO, @RequestBody(required = false) subadminDTO subDTO,
+
+		 @RequestParam(name = "emailNovo", required = false) String novoEmail,
+			@RequestParam(name = "senhaNova", required = false) String novaSenha) {
 		if (req.getRequestURI().equals("/usuario/alterar")) {
-			Aluno alunoDadosAtuais = Aluno.builder().email(email).senha(senhaAtual).identificacao(identificador).build();
+			Aluno alunoDadosAtuais = Aluno.builder().email(userDTO.getEmail()).senha(userDTO.getSenha()).identificacao(userDTO.getIdentificacao()).build();
 			rep.Atualizar(alunoDadosAtuais);
 
 
@@ -127,21 +134,21 @@ public final class restMain {
 	@PostMapping("/funcionarios/cursoAdd")
 	@ResponseStatus(code = HttpStatus.OK)
 	public String uploadCurso(@RequestParam("file") MultipartFile file) throws IllegalStateException, IOException {
-		ByteArrayInputStream bites = new ByteArrayInputStream(file.getBytes());
-		serv.gravar(bites.readAllBytes(), new Curso());
+		@Cleanup ByteArrayInputStream bites = new ByteArrayInputStream(file.getBytes());
+		 serv.gravar(bites.readAllBytes(), new Curso());
 
 		return "Curso salvo";
 	}
 
 	@GetMapping(value = { "/procurar/{curso}", "*/{curso}" })
 	@ResponseStatus(code = HttpStatus.ACCEPTED)
-	public Curso assistir(@PathVariable("curso") String nome) {
+	public Curso assistir(@NotEmpty @PathVariable("curso") String nome) {
 		return serv.cursoDados(nome);
 	}
 
 	@GetMapping("*/procurar")
 	@ResponseStatus(code = HttpStatus.FOUND)
-	public List<Curso> procura(@RequestParam(name = "nome") String nome) {
+	public List<Curso> procura(@NotBlank @RequestParam(name = "nome") String nome) {
 		return serv.procura(nome);
 	}
 
