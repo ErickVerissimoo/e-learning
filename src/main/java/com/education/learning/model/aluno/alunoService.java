@@ -1,6 +1,6 @@
 package com.education.learning.model.aluno;
 
-import java.security.SecureRandom;
+import java.util.Random;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -33,7 +33,7 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 	}
 
 	 public static String gerarIdentificador() {
-		SecureRandom random = new SecureRandom();
+		Random random = new Random();
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < 10; i++) {
 			builder.append(random.nextInt(0, 10));

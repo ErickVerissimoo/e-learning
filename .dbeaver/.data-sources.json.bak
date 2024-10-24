@@ -17,6 +17,57 @@
 				"closeIdleConnection": true,
 				"auth-model": "native"
 			}
+		},
+		"mariaDB-1928d952cb5-1c6514717be4147e": {
+			"provider": "mysql",
+			"driver": "mariaDB",
+			"name": "elearning 2",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "330",
+				"database": "elearning",
+				"url": "jdbc:mariadb://localhost:3307/teste",
+				"configurationType": "MANUAL",
+				"home": "/usr",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
+			}
+		},
+		"mariaDB-1928d97aeb6-44e612baaa130047": {
+			"provider": "mysql",
+			"driver": "mariaDB",
+			"name": "teste",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "3307",
+				"database": "teste",
+				"url": "jdbc:mariadb://localhost:3307/teste",
+				"configurationType": "URL",
+				"home": "/usr",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
+			}
+		},
+		"mariaDB-1928dc80683-638af21fa402b3f0": {
+			"provider": "mysql",
+			"driver": "mariaDB",
+			"name": "elearning 3",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "330",
+				"database": "elearning",
+				"url": "jdbc:mariadb://localhost:3307/teste",
+				"configurationType": "MANUAL",
+				"home": "/usr",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
+			}
 		}
 	},
 	"connection-types": {

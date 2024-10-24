@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.education.learning.model.DTOs.AlunoDTO;
+import com.education.learning.model.DTOs.alunoDTO;
+import com.education.learning.model.DTOs.cadastroDTO;
+import com.education.learning.model.DTOs.loginGeneric;
 import com.education.learning.model.DTOs.subadminDTO;
 import com.education.learning.model.aluno.Aluno;
 import com.education.learning.model.aluno.alunoService;
@@ -32,10 +35,8 @@ import com.education.learning.model.subadmin.subadminService;
 import com.education.learning.model.superclass.Usuario;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Cleanup;
 
 @RestController
@@ -51,17 +52,22 @@ public final class restMain {
 	private subadminService sub;
 
 	@PostMapping(value = { "/cadastrar", "/colaborador/cadastrar" }, consumes=MediaType.APPLICATION_JSON_VALUE)
-	public final ResponseEntity<String> Adicionar(@Valid @RequestBody(required = false) AlunoDTO alunoDTO,
-			@RequestBody(required= false) subadminDTO subadminDTO,
-			@NotNull HttpServletRequest requisicao) {
-
-		if (requisicao.getRequestURI().equals("/cadastrar")) {
-			rep.Cadastrar(Aluno.builder().nome(alunoDTO.getNome()).email(alunoDTO.getEmail()).senha(alunoDTO.getSenha()).build());
+	public final ResponseEntity<String> Adicionar( @RequestBody() cadastroDTO cadastro,
+			 HttpServletRequest requisicao) {
+		
+		alunoDTO alunus = cadastro.getAluno();
+		subadminDTO subDTO = cadastro.getSubadmi();
+		
+		if (requisicao.getRequestURI().equals("/home/cadastrar") && alunus!=null) {
+			
+			rep.Cadastrar(Aluno.builder().nome(alunus.getNome()).email(alunus.getEmail()).senha(alunus.getSenha()).build());
 
 		}
 
-		else if (requisicao.getRequestURI().equals("/funcionarios/cadastrar")) {
-			sub.Cadastrar(Subadmin.builder().nome(subadminDTO.getNome()).email(subadminDTO.getEmail()).senha(subadminDTO.getSenha()).build());
+		else if (requisicao.getRequestURI().equals("/home/colaborador/cadastrar") && subDTO!=null) {
+			
+			
+			sub.Cadastrar(Subadmin.builder().nome(subDTO.getNome()).email(subDTO.getEmail()).senha(subDTO.getSenha()).build());
 
 		} else {
 			throw new UnsupportedOperationException("Cadastro inválido");
@@ -75,7 +81,7 @@ public final class restMain {
 	public final ResponseEntity<String> deleletar(
 			@RequestParam(name = "identificador", required = false) String identificador,
 			@RequestParam(required = true) String id, HttpServletRequest req) {
-
+		
 		if (req.getRequestURI().equals("/usuario/deletar")) {
 			rep.Deletar(id);
 		} else if (req.getRequestURI().equals("/restrito/funcionario/deletar")) {
@@ -93,12 +99,12 @@ public final class restMain {
 
 	@PutMapping(value = { "/usuario/alterar", "/funcionario/deletar" })
 	public ResponseEntity<String> alterar(HttpServletRequest req,
-			@RequestBody(required = false) AlunoDTO userDTO, @RequestBody(required = false) subadminDTO subDTO,
+			@RequestBody(required = false) cadastroDTO userDTO, @RequestParam(name = "emailNovo", required = false) String novoEmail,
 
-		 @RequestParam(name = "emailNovo", required = false) String novoEmail,
-			@RequestParam(name = "senhaNova", required = false) String novaSenha) {
+		 @RequestParam(name = "senhaNova", required = false) String novaSenha) {
 		if (req.getRequestURI().equals("/usuario/alterar")) {
-			Aluno alunoDadosAtuais = Aluno.builder().email(userDTO.getEmail()).senha(userDTO.getSenha()).identificacao(userDTO.getIdentificacao()).build();
+			alunoDTO velho = userDTO.getAluno();
+			Aluno alunoDadosAtuais = Aluno.builder().email(velho.getEmail()).senha(velho.getSenha()).identificacao(velho.getIdentificacao()).build();
 			rep.Atualizar(alunoDadosAtuais);
 
 
@@ -109,21 +115,19 @@ public final class restMain {
 
 	}
 
-	@PostMapping("/Login")
-	public ResponseEntity<Usuario> login(@RequestParam("email") String email,
-			@RequestParam(name = "identificador", required = true) String identificador,
-			@RequestParam(name = "senha", required = true) String senha) {
-
-		if (sub.Login(email, senha, identificador)) {
-			return new ResponseEntity<>(sub.entrar(identificador, email, senha),
-					ResponseEntity.ok("aceito").getStatusCode());
-		} else if (rep.Login(email, senha, identificador)) {
-			return new ResponseEntity<>(rep.entrar(email, senha, identificador),
-					ResponseEntity.ok("aceito").getStatusCode());
-		} else {
-			return ResponseEntity.badRequest().build();
-		}
-
+	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<Object> login(@RequestBody loginGeneric cadastro) {
+	    
+	    if (sub.Login(cadastro.getEmail(), cadastro.getSenha(), cadastro.getIdentificacao())) {
+	        Usuario usuario = sub.entrar(cadastro.getEmail(), cadastro.getSenha(), cadastro.getIdentificacao());
+	        return ResponseEntity.ok(usuario); 
+	    } else if (rep.Login(cadastro.getEmail(), cadastro.getSenha(), cadastro.getIdentificacao())) {
+	        Usuario usuario = rep.entrar(cadastro.getEmail(), cadastro.getSenha(), cadastro.getIdentificacao());
+	        return ResponseEntity.ok(usuario); 
+	    } else {
+	        return ResponseEntity.badRequest().body("Credenciais inválidas."); // Mensagem clara em caso de erro
+	    }
 	}
 
 	@GetMapping("*/verTodos")

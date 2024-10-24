@@ -8,17 +8,17 @@ import com.education.learning.model.superclass.Usuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @SuperBuilder
+@Table(name = "aluno")
 public final class Aluno extends Usuario {
 
 
-	@ManyToMany(fetch = FetchType.LAZY )
-	@JoinTable()
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "alunos" )
 	@Column(nullable = true)
 	private Set<Curso> curso;
 
