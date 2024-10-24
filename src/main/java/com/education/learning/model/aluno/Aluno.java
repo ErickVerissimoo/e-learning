@@ -10,11 +10,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @SuperBuilder
 @Table(name = "aluno")
+@NoArgsConstructor
 public final class Aluno extends Usuario {
 
 

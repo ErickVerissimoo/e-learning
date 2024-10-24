@@ -1,9 +1,7 @@
 package com.education.learning.model.aluno;
 
-import java.util.Random;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.education.learning.model.superclass.userService;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -26,36 +25,20 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 }
 
 	@Override
-	public void Cadastrar(Aluno aluno) {
-		String identificador = gerarIdentificador();
+	public void Cadastrar(Aluno aluno)  {
+		if(repo.exists(aluno.getEmail(), aluno.getNome())) {
+			throw new EntityExistsException("Aluno já cadastrado");
+		}
+		String identificador = this.gerarIdentificador();
 		aluno.setIdentificacao(identificador);
 		repo.save(aluno);
 	}
 
-	 public static String gerarIdentificador() {
-		Random random = new Random();
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < 10; i++) {
-			builder.append(random.nextInt(0, 10));
-		}
-		String fine = new String(builder);
-		return fine;
-	}
+
 
 
 	public void AtualizarEmail(String id, String email) {
 		repo.updateEmail(email ,Long.parseLong(id));
-	}
-
-
-	public Boolean isAluno(String email, String senha, String identificacao) {
-		if(Objects.isNull(identificacao)) {
-
-			return false;
-		}
-
-		String regex = "^\\d{10}$";
-		return repo.Validar(email, senha, identificacao) != null && identificacao.matches(regex);
 	}
 
 
@@ -81,13 +64,13 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 	}
 
 	@Override
-	public Aluno entrar(String email, String senha, String identificador) {
-		Optional<Aluno> teste = Optional.of(repo.Validar(email, senha, identificador));
+	public Aluno entrar(String email, String senha, String nome) {
+		Optional<Aluno> teste = Optional.of(repo.Validar(email, senha, nome));
 
 		return teste.orElseThrow();
 	}
 	@Override
-	public boolean Login(String email, String senha, String identificador) {
-		return repo.Validar(email, senha, identificador)!=null && this.isAluno(email, senha, identificador);
+	public boolean Login(String email, String senha, String nome) {
+		return repo.Validar(email, senha, nome)!=null;
 	}
 }

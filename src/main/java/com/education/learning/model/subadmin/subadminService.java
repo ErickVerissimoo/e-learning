@@ -1,10 +1,9 @@
 package com.education.learning.model.subadmin;
 
-import static com.education.learning.model.aluno.alunoService.gerarIdentificador;
-
 import java.util.List;
 import java.util.Random;
 
+import org.checkerframework.common.returnsreceiver.qual.This;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ public class subadminService implements userService<Subadmin, String>  {
 	public void Cadastrar(Subadmin admin) throws EntityNotFoundException {
 
 
-
+		
 
 		admin.setIdentificacao(geraridentificador());
 		repo.save(admin);
@@ -38,8 +37,9 @@ public class subadminService implements userService<Subadmin, String>  {
 		return repo.Retornar(identificacao, email, senha) !=null && identificacao.matches(regex);
 	}
 
- private final static String geraridentificador() {
-	StringBuilder builder = new StringBuilder(gerarIdentificador());
+ private String geraridentificador() {
+	 
+	StringBuilder builder = new StringBuilder(this.gerarIdentificador());
 	String abd = "abcdefg";
 	Random random = new Random();
 	for(int i =0; i<=3;i++) {
@@ -61,9 +61,9 @@ public List<Subadmin> getAll() {
 
 
 @Override
-public boolean Login(String email, String senha, String identificador) {
+public boolean Login(String email, String senha, String nome) {
 
-	return repo.Retornar(identificador, email, senha) !=null && this.isSubadmin(identificador, email, senha);
+	return repo.Retornar(nome, email, senha) !=null;
 }
 
 
@@ -75,9 +75,9 @@ public Subadmin Buscar(String id) throws EntityNotFoundException {
 
 
 @Override
-public Subadmin entrar(String email, String senha, String identificador) {
+public Subadmin entrar(String email, String senha, String nome) {
 
-	return repo.Retornar(identificador, email, senha);
+	return repo.Retornar(nome, email, senha);
 }
 
 @Override

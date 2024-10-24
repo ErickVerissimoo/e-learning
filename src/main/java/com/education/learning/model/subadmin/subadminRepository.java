@@ -12,6 +12,6 @@ public interface subadminRepository extends JpaRepository<Subadmin, Integer>{
 		@Query("UPDATE Subadmin u SET u.nome = :nome where u.id = :id")
 		void updateNome (@Param("nome") String nome, @Param("id")Long id);
 
-	@Query("select p from Subadmin p where p.identificacao=:identificacao and p.email=:email and p.senha=:senha")
-	Subadmin Retornar(@Param("identificacao") String identificacao, @Param("email") String email, @Param("senha") String senha);
+	@Query("select p from Subadmin p where p.nome=:nome and p.email=:email and p.senha=:senha")
+	Subadmin Retornar(@Param("nome") String nome, @Param("email") String email, @Param("senha") String senha);
 }

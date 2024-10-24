@@ -52,7 +52,7 @@ public final class restMain {
 	private subadminService sub;
 
 	@PostMapping(value = { "/cadastrar", "/colaborador/cadastrar" }, consumes=MediaType.APPLICATION_JSON_VALUE)
-	public final ResponseEntity<String> Adicionar( @RequestBody() cadastroDTO cadastro,
+	public final ResponseEntity<String> Adicionar( @RequestBody cadastroDTO cadastro,
 			 HttpServletRequest requisicao) {
 		
 		alunoDTO alunus = cadastro.getAluno();
@@ -116,14 +116,13 @@ public final class restMain {
 	}
 
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public ResponseEntity<Object> login(@RequestBody loginGeneric cadastro) {
-	    
-	    if (sub.Login(cadastro.getEmail(), cadastro.getSenha(), cadastro.getIdentificacao())) {
-	        Usuario usuario = sub.entrar(cadastro.getEmail(), cadastro.getSenha(), cadastro.getIdentificacao());
+	public ResponseEntity<Object> login(@RequestBody cadastroDTO cadastro) {
+	    var log = cadastro.getLog();
+	    if (sub.Login(log.getEmail(), log.getSenha(), log.getNome())) {
+	        Usuario usuario = sub.entrar(log.getEmail(), log.getSenha(), log.getNome());
 	        return ResponseEntity.ok(usuario); 
-	    } else if (rep.Login(cadastro.getEmail(), cadastro.getSenha(), cadastro.getIdentificacao())) {
-	        Usuario usuario = rep.entrar(cadastro.getEmail(), cadastro.getSenha(), cadastro.getIdentificacao());
+	    } else if (rep.Login(log.getEmail(), log.getSenha(), log.getNome())) {
+	        Usuario usuario = rep.entrar(log.getEmail(), log.getSenha(), log.getNome());
 	        return ResponseEntity.ok(usuario); 
 	    } else {
 	        return ResponseEntity.badRequest().body("Credenciais inválidas."); // Mensagem clara em caso de erro

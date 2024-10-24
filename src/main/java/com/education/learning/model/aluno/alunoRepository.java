@@ -12,14 +12,15 @@ public interface alunoRepository extends JpaRepository<Aluno, Long>{
 	@Query("Update Aluno p SET p.email = :email where p.id = :id")
 	void updateEmail(@Param("email") String email, @Param("id")Long id);
 
-	@Query("Select p from Aluno p where p.email = :email and p.senha = :senha and p.identificacao=:identificacao")
+	@Query("Select p from Aluno p where p.email = :email and p.senha = :senha and p.nome=:nome")
 	 Aluno Validar(@Param("email") String email, @Param("senha") String senha,
-			 @Param("identificacao") String identificacao);
+			 @Param("nome") String nome);
 	@Modifying @Query("Delete from Aluno p where p.identificacao = :identificacao")
 	void DeleteByIdentificador(@Param("identificacao")String identificacao);
 
 	@Modifying
 	@Query("Update Aluno p SET p.senha=:senhaNova where p.senha=:senha")
 	void updateSenha(@Param("senha") String senhaAtual, @Param("senhaNova") String nova);
-
+	@Query("Select p from Aluno p where p.email=:email or p.nome=:nome")
+	boolean exists (@Param("email") String email, @Param("nome") String nome);
 }
