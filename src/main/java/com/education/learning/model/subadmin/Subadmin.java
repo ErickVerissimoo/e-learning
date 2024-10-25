@@ -1,5 +1,6 @@
 package com.education.learning.model.subadmin;
 
+
 import com.education.learning.model.superclass.Usuario;
 
 import jakarta.persistence.Entity;
@@ -10,6 +11,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Table(name="subadmin")
 public class Subadmin extends Usuario {
+	
+	
 
 
 }

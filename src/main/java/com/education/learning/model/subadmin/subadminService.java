@@ -3,7 +3,6 @@ package com.education.learning.model.subadmin;
 import java.util.List;
 import java.util.Random;
 
-import org.checkerframework.common.returnsreceiver.qual.This;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ public class subadminService implements userService<Subadmin, String>  {
 	public void Cadastrar(Subadmin admin) throws EntityNotFoundException {
 
 
-		
+
 
 		admin.setIdentificacao(geraridentificador());
 		repo.save(admin);
@@ -38,7 +37,7 @@ public class subadminService implements userService<Subadmin, String>  {
 	}
 
  private String geraridentificador() {
-	 
+
 	StringBuilder builder = new StringBuilder(this.gerarIdentificador());
 	String abd = "abcdefg";
 	Random random = new Random();

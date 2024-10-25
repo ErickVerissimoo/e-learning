@@ -22,5 +22,5 @@ public interface alunoRepository extends JpaRepository<Aluno, Long>{
 	@Query("Update Aluno p SET p.senha=:senhaNova where p.senha=:senha")
 	void updateSenha(@Param("senha") String senhaAtual, @Param("senhaNova") String nova);
 	@Query("Select p from Aluno p where p.email=:email or p.nome=:nome")
-	boolean exists (@Param("email") String email, @Param("nome") String nome);
+	Aluno exists (@Param("email") String email, @Param("nome") String nome);
 }

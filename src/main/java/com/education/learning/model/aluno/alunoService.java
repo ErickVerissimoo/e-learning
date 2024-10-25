@@ -26,7 +26,7 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 
 	@Override
 	public void Cadastrar(Aluno aluno)  {
-		if(repo.exists(aluno.getEmail(), aluno.getNome())) {
+		if(repo.exists(aluno.getEmail(), aluno.getNome())!=null) {
 			throw new EntityExistsException("Aluno já cadastrado");
 		}
 		String identificador = this.gerarIdentificador();

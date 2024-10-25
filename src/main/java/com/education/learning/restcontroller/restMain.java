@@ -17,14 +17,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.education.learning.model.DTOs.alunoDTO;
 import com.education.learning.model.DTOs.cadastroDTO;
-import com.education.learning.model.DTOs.loginGeneric;
 import com.education.learning.model.DTOs.subadminDTO;
 import com.education.learning.model.aluno.Aluno;
 import com.education.learning.model.aluno.alunoService;
@@ -51,23 +49,33 @@ public final class restMain {
 	@Autowired
 	private subadminService sub;
 
-	@PostMapping(value = { "/cadastrar", "/colaborador/cadastrar" }, consumes=MediaType.APPLICATION_JSON_VALUE)
-	public final ResponseEntity<String> Adicionar( @RequestBody cadastroDTO cadastro,
-			 HttpServletRequest requisicao) {
-		
-		alunoDTO alunus = cadastro.getAluno();
-		subadminDTO subDTO = cadastro.getSubadmi();
-		
-		if (requisicao.getRequestURI().equals("/home/cadastrar") && alunus!=null) {
-			
-			rep.Cadastrar(Aluno.builder().nome(alunus.getNome()).email(alunus.getEmail()).senha(alunus.getSenha()).build());
+	@PostMapping(value = { "/cadastrar", "/colaborador/cadastrar" }, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public final ResponseEntity<String> Adicionar(@RequestBody cadastroDTO cadastro, HttpServletRequest requisicao) {
+
+		alunoDTO alunus
+		= cadastro.getAluno();
+		subadminDTO subDTO =
+				cadastro.getSubadmi();
+
+		if (requisicao.
+				getRequestURI().
+				equals("/home/cadastrar")
+				&& alunus !=
+				null) {
+
+			rep.Cadastrar(
+					Aluno.builder()
+					.nome(alunus.getNome())
+					.email(alunus.getEmail())
+					.senha(alunus.getSenha())
+					.build());
 
 		}
 
-		else if (requisicao.getRequestURI().equals("/home/colaborador/cadastrar") && subDTO!=null) {
-			
-			
-			sub.Cadastrar(Subadmin.builder().nome(subDTO.getNome()).email(subDTO.getEmail()).senha(subDTO.getSenha()).build());
+		else if (requisicao.getRequestURI().equals("/home/colaborador/cadastrar") && subDTO != null) {
+
+			sub.Cadastrar(Subadmin.builder().nome(subDTO.getNome()).email(subDTO.getEmail()).senha(subDTO.getSenha())
+					.build());
 
 		} else {
 			throw new UnsupportedOperationException("Cadastro inválido");
@@ -77,11 +85,11 @@ public final class restMain {
 
 	}
 
-	@DeleteMapping(value = { "/usuario/deletar", "/funcionarios/deletar" }, consumes=MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = { "/usuario/deletar", "/funcionarios/deletar" }, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public final ResponseEntity<String> deleletar(
 			@RequestParam(name = "identificador", required = false) String identificador,
 			@RequestParam(required = true) String id, HttpServletRequest req) {
-		
+
 		if (req.getRequestURI().equals("/usuario/deletar")) {
 			rep.Deletar(id);
 		} else if (req.getRequestURI().equals("/restrito/funcionario/deletar")) {
@@ -98,15 +106,15 @@ public final class restMain {
 	}
 
 	@PutMapping(value = { "/usuario/alterar", "/funcionario/deletar" })
-	public ResponseEntity<String> alterar(HttpServletRequest req,
-			@RequestBody(required = false) cadastroDTO userDTO, @RequestParam(name = "emailNovo", required = false) String novoEmail,
+	public ResponseEntity<String> alterar(HttpServletRequest req, @RequestBody(required = false) cadastroDTO userDTO,
+			@RequestParam(name = "emailNovo", required = false) String novoEmail,
 
-		 @RequestParam(name = "senhaNova", required = false) String novaSenha) {
+			@RequestParam(name = "senhaNova", required = false) String novaSenha) {
 		if (req.getRequestURI().equals("/usuario/alterar")) {
 			alunoDTO velho = userDTO.getAluno();
-			Aluno alunoDadosAtuais = Aluno.builder().email(velho.getEmail()).senha(velho.getSenha()).identificacao(velho.getIdentificacao()).build();
+			Aluno alunoDadosAtuais = Aluno.builder().email(velho.getEmail()).senha(velho.getSenha())
+					.identificacao(velho.getIdentificacao()).build();
 			rep.Atualizar(alunoDadosAtuais);
-
 
 		} else if (req.getRequestURI().equals("/funcionario/deletar")) {
 
@@ -117,16 +125,16 @@ public final class restMain {
 
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> login(@RequestBody cadastroDTO cadastro) {
-	    var log = cadastro.getLog();
-	    if (sub.Login(log.getEmail(), log.getSenha(), log.getNome())) {
-	        Usuario usuario = sub.entrar(log.getEmail(), log.getSenha(), log.getNome());
-	        return ResponseEntity.ok(usuario); 
-	    } else if (rep.Login(log.getEmail(), log.getSenha(), log.getNome())) {
-	        Usuario usuario = rep.entrar(log.getEmail(), log.getSenha(), log.getNome());
-	        return ResponseEntity.ok(usuario); 
-	    } else {
-	        return ResponseEntity.badRequest().body("Credenciais inválidas."); // Mensagem clara em caso de erro
-	    }
+		var log = cadastro.getLog();
+		if (sub.Login(log.getEmail(), log.getSenha(), log.getNome())) {
+			Usuario usuario = sub.entrar(log.getEmail(), log.getSenha(), log.getNome());
+			return ResponseEntity.ok(usuario);
+		} else if (rep.Login(log.getEmail(), log.getSenha(), log.getNome())) {
+			Usuario usuario = rep.entrar(log.getEmail(), log.getSenha(), log.getNome());
+			return ResponseEntity.ok(usuario);
+		} else {
+			return ResponseEntity.badRequest().body("Credenciais inválidas."); 
+		}
 	}
 
 	@GetMapping("*/verTodos")
@@ -136,9 +144,13 @@ public final class restMain {
 
 	@PostMapping("/funcionarios/cursoAdd")
 	@ResponseStatus(code = HttpStatus.OK)
-	public String uploadCurso(@RequestParam("file") MultipartFile file) throws IllegalStateException, IOException {
-		@Cleanup ByteArrayInputStream bites = new ByteArrayInputStream(file.getBytes());
-		 serv.gravar(bites.readAllBytes(), new Curso());
+	public String uploadCurso(@RequestParam("file") 
+	MultipartFile file) 
+			throws IllegalStateException, 
+			IOException {
+		@Cleanup
+		ByteArrayInputStream bites = new ByteArrayInputStream(file.getBytes());
+		serv.gravar(bites.readAllBytes(), new Curso());
 
 		return "Curso salvo";
 	}
