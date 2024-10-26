@@ -8,9 +8,9 @@
   <groupId>com.example</groupId>
   <artifactId>e-learning</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Seu Projeto</name>
-  <description>Descrição do seu projeto</description>
-  <url>http://seu.projeto.url</url>
+  <name>elearning</name>
+  <description>plataforma educacional</description>
+
 
  
 
@@ -20,7 +20,7 @@
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>3.3.4</version>
+        <version>3.3.5</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -56,6 +56,10 @@
     <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-devtools</artifactId>
+    </dependency>
+    <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
   </dependencies>
   <build>

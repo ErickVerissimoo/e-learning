@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 public interface alunoRepository extends JpaRepository<Aluno, Long>{
 	@Modifying
@@ -23,4 +25,8 @@ public interface alunoRepository extends JpaRepository<Aluno, Long>{
 	void updateSenha(@Param("senha") String senhaAtual, @Param("senhaNova") String nova);
 	@Query("Select p from Aluno p where p.email=:email or p.nome=:nome")
 	Aluno exists (@Param("email") String email, @Param("nome") String nome);
+	@Modifying
+	@Transactional
+	@Query(value ="alter table aluno AUTO_INCREMENT = 1", nativeQuery=true)
+	void resetar();
 }

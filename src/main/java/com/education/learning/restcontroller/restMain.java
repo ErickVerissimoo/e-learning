@@ -137,7 +137,7 @@ public final class restMain {
 		}
 	}
 
-	@GetMapping("*/verTodos")
+	@GetMapping(value = "/verTodos", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Aluno> alunos() {
 		return rep.getAll();
 	}
@@ -148,8 +148,8 @@ public final class restMain {
 	MultipartFile file) 
 			throws IllegalStateException, 
 			IOException {
-		@Cleanup
-		ByteArrayInputStream bites = new ByteArrayInputStream(file.getBytes());
+		
+		@Cleanup ByteArrayInputStream bites = new ByteArrayInputStream(file.getBytes());
 		serv.gravar(bites.readAllBytes(), new Curso());
 
 		return "Curso salvo";
@@ -166,5 +166,9 @@ public final class restMain {
 	public List<Curso> procura(@NotBlank @RequestParam(name = "nome") String nome) {
 		return serv.procura(nome);
 	}
-
+	@DeleteMapping("/resetar")
+	public String resetar() {
+		rep.apagar();
+		return "Reset completo";
+	}
 }
