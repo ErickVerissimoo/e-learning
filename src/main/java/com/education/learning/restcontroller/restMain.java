@@ -158,7 +158,7 @@ public final class restMain {
 		return serv.procura(nome);
 	}
 
-	@DeleteMapping("/funcionarios/resetar")
+	@DeleteMapping("/funcionarios/apagar")
 	public String resetar() {
 		rep.apagar();
 		return "Reset completo";
