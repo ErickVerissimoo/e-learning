@@ -21,7 +21,7 @@ public class alunoService implements userService<Aluno, String>   {
 	}
 	@Override
 public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
-
+		repo.Update(atualizar.getEmail(), atualizar.getSenha(), atualizar.getId());
 }
 
 	@Override
@@ -36,10 +36,6 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 
 
 
-
-	public void AtualizarEmail(String id, String email) {
-		repo.updateEmail(email ,Long.parseLong(id));
-	}
 
 
 	@Override
@@ -73,6 +69,7 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 	public boolean Login(String email, String senha, String nome) {
 		return repo.Validar(email, senha, nome)!=null;
 	}
+	
 	public void apagar() {
 		repo.deleteAll();
 		repo.resetar();

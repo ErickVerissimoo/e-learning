@@ -81,7 +81,7 @@ public Subadmin entrar(String email, String senha, String nome) {
 
 @Override
 public void Atualizar(Subadmin entity) throws EntityNotFoundException {
-	// TODO Auto-generated method stub
+	repo.update(entity.getEmail(), entity.getSenha(), entity.getId());
 
 }
 

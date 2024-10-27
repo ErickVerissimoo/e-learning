@@ -10,19 +10,15 @@ import jakarta.transaction.Transactional;
 
 @Repository
 public interface alunoRepository extends JpaRepository<Aluno, Long>{
-	@Modifying
-	@Query("Update Aluno p SET p.email = :email where p.id = :id")
-	void updateEmail(@Param("email") String email, @Param("id")Long id);
 
 	@Query("Select p from Aluno p where p.email = :email and p.senha = :senha and p.nome=:nome")
 	 Aluno Validar(@Param("email") String email, @Param("senha") String senha,
 			 @Param("nome") String nome);
-	@Modifying @Query("Delete from Aluno p where p.identificacao = :identificacao")
-	void DeleteByIdentificador(@Param("identificacao")String identificacao);
-
+	
 	@Modifying
-	@Query("Update Aluno p SET p.senha=:senhaNova where p.senha=:senha")
-	void updateSenha(@Param("senha") String senhaAtual, @Param("senhaNova") String nova);
+	@Query("update Aluno p SET p.email = :email and p.senha where p.id = :id")
+	void Update(@Param("email") String email, @Param("senha") String senha, @Param("id") long id);
+	
 	@Query("Select p from Aluno p where p.email=:email or p.nome=:nome")
 	Aluno exists (@Param("email") String email, @Param("nome") String nome);
 	@Modifying
