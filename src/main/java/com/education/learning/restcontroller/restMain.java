@@ -35,6 +35,7 @@ import com.education.learning.model.superclass.Usuario;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Cleanup;
 
 @RestController
@@ -136,7 +137,7 @@ public final class restMain {
 
 	@PostMapping("/funcionarios/cursoAdd")
 	@ResponseStatus(code = HttpStatus.OK)
-	public String uploadCurso(@RequestParam("file") MultipartFile file) throws IllegalStateException, IOException {
+	public String uploadCurso(@RequestParam(name = "file") MultipartFile file) throws IllegalStateException, IOException {
 
 		@Cleanup
 		ByteArrayInputStream bites = new ByteArrayInputStream(file.getBytes());
@@ -164,7 +165,7 @@ public final class restMain {
 	}
 
 	@PostMapping("/funcionarios/{curso}/adicionarCert")
-	public ResponseEntity<String> addCertificado(@PathVariable(name = "curso") String curs, MultipartFile pdf)
+	public ResponseEntity<String> addCertificado(@PathVariable(name = "curso", required = true) String curs, @RequestParam(name="arq", required = true) @NotNull MultipartFile pdf)
 			throws IOException {
 		Curso cr = serv.cursoDados(curs);
 		cr.setPdf(pdf.getBytes());
