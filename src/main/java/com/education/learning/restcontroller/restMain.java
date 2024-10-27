@@ -48,7 +48,7 @@ public final class restMain {
 	private cursoService serv;
 	@Autowired
 	private subadminService sub;
-
+	
 	@PostMapping(value = { "/cadastrar", "/colaborador/cadastrar" }, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public final ResponseEntity<String> Adicionar(@RequestBody cadastroDTO cadastro, HttpServletRequest requisicao) {
 
@@ -72,7 +72,7 @@ public final class restMain {
 
 		}
 
-		else if (requisicao.getRequestURI().equals("/home/colaborador/cadastrar") && subDTO != null) {
+		else if (requisicao.getRequestURI().equals("/home/funcionarios/cadastrar") && subDTO != null) {
 
 			sub.Cadastrar(Subadmin.builder().nome(subDTO.getNome()).email(subDTO.getEmail()).senha(subDTO.getSenha())
 					.build());
@@ -105,7 +105,7 @@ public final class restMain {
 		return new ResponseEntity<>("Usuario deletado", ResponseEntity.ok("Deletado").getStatusCode());
 	}
 
-	@PutMapping(value = { "/usuario/alterar", "/funcionario/deletar" })
+	@PutMapping(value = { "/usuario/alterar", "/funcionarios/deletar" })
 	public ResponseEntity<String> alterar(HttpServletRequest req, @RequestBody(required = false) cadastroDTO userDTO,
 			@RequestParam(name = "emailNovo", required = false) String novoEmail,
 
@@ -166,9 +166,18 @@ public final class restMain {
 	public List<Curso> procura(@NotBlank @RequestParam(name = "nome") String nome) {
 		return serv.procura(nome);
 	}
-	@DeleteMapping("/resetar")
+	@DeleteMapping("/funcionarios/resetar")
 	public String resetar() {
 		rep.apagar();
 		return "Reset completo";
 	}
+@PutMapping("/funcionarios/{curso}")
+public ResponseEntity<String> addCertificado(@PathVariable(name = "curso") String curs, MultipartFile pdf) throws IOException{
+		Curso cr = serv.cursoDados(curs);
+		cr.setPdf(pdf.getBytes());
+		return ResponseEntity.accepted().build();
+}
+
+
+
 }

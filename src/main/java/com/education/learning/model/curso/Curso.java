@@ -5,7 +5,6 @@ import java.util.Collection;
 import org.springframework.stereotype.Component;
 
 import com.education.learning.model.aluno.Aluno;
-import com.education.learning.model.certificado.Certificado;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +14,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 @Entity
@@ -34,7 +32,5 @@ public class Curso {
 	@Lob
 	private byte[] dados;
 	private boolean isCompleted;
-	@OneToOne(mappedBy = "curso")
-    @JoinColumn(name = "certificado_id")
-	private Certificado certificado;
+	private byte[] pdf;
 }
