@@ -16,7 +16,7 @@ public interface alunoRepository extends JpaRepository<Aluno, Long>{
 			 @Param("nome") String nome);
 	
 	@Modifying
-	@Query("update Aluno p SET p.email = :email and p.senha where p.id = :id")
+	@Query("update Aluno p SET p.email = :email, p.senha=:senha where p.id = :id")
 	void Update(@Param("email") String email, @Param("senha") String senha, @Param("id") long id);
 	
 	@Query("Select p from Aluno p where p.email=:email or p.nome=:nome")

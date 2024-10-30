@@ -8,6 +8,8 @@ import com.education.learning.model.superclass.Usuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
@@ -20,9 +22,10 @@ import lombok.experimental.SuperBuilder;
 public final class Aluno extends Usuario {
 
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "alunos" )
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "aluno_curso", joinColumns= @JoinColumn(name = "aluno_id"), inverseJoinColumns = @JoinColumn(name= "curso_id"))
 	@Column(nullable = true)
-	private Set<Curso> curso;
+	private Set<Curso> cursos;
 
 
 

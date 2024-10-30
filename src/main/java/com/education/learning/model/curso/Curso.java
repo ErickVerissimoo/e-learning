@@ -10,8 +10,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
@@ -25,9 +23,7 @@ public class Curso {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
-	@ManyToMany
-	@JoinTable(name="curso_aluno", joinColumns = @JoinColumn(name ="curso_id"),
-	inverseJoinColumns = @JoinColumn(name = "aluno_id"))
+	@ManyToMany(mappedBy = "cursos")
 	Collection<Aluno> alunos;
 	@Lob
 	private byte[] dados;
