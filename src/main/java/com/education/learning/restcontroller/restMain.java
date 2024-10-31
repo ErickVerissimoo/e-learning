@@ -140,7 +140,8 @@ public final class restMain {
 
 	@PostMapping("/funcionarios/cursoAdd")
 	@ResponseStatus(code = HttpStatus.OK)
-	public String uploadCurso(@RequestParam(name = "file") MultipartFile file) throws IllegalStateException, IOException {
+	public String uploadCurso(@RequestParam(name = "file") MultipartFile file)
+			throws IllegalStateException, IOException {
 
 		@Cleanup
 		ByteArrayInputStream bites = new ByteArrayInputStream(file.getBytes());
@@ -168,13 +169,13 @@ public final class restMain {
 	}
 
 	@PostMapping("/funcionarios/{curso}/adicionarCert")
-	public ResponseEntity<String> addCertificado(@PathVariable(name = "curso", required = true) String curs, @RequestParam(name="arq", required = true) @NotNull MultipartFile pdf)
-			throws IOException {
+	public ResponseEntity<String> addCertificado(@PathVariable(name = "curso", required = true) String curs,
+			@RequestParam(name = "arq", required = true) @NotNull MultipartFile pdf) throws IOException {
 		Curso cr = serv.cursoDados(curs);
 		cr.setPdf(pdf.getBytes());
 		return ResponseEntity.accepted().build();
 	}
-	
+
 	@PostMapping("/{curso}/matricular")
 	public String cadastrar(@PathVariable String curso, HttpSession sessao) {
 		Curso curs = serv.cursoDados(curso);
@@ -182,6 +183,10 @@ public final class restMain {
 		rep.Matricular(curs, alunso);
 		return "Matriculado";
 	}
-	
-	
+
+	@PostMapping("/logout")
+	public String sair(HttpSession sessao) {
+		sessao.invalidate();
+		return "Usuario deslogado com sucesso";
+	}
 }
