@@ -33,6 +33,7 @@ import com.education.learning.model.subadmin.subadminService;
 import com.education.learning.model.superclass.Usuario;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -116,13 +117,15 @@ public final class restMain {
 	}
 
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> login(@RequestBody(required = true) cadastroDTO cadastro) {
+	public ResponseEntity<Object> login(@RequestBody(required = true) cadastroDTO cadastro, HttpSession sessao) {
 		var log = cadastro.getLog();
 		if (sub.Login(log.getEmail(), log.getSenha(), log.getNome())) {
 			Usuario usuario = sub.entrar(log.getEmail(), log.getSenha(), log.getNome());
+			sessao.setAttribute("email", usuario.getEmail());
 			return ResponseEntity.ok(usuario);
 		} else if (rep.Login(log.getEmail(), log.getSenha(), log.getNome())) {
 			Usuario usuario = rep.entrar(log.getEmail(), log.getSenha(), log.getNome());
+			sessao.setAttribute("email", usuario.getEmail());
 			return ResponseEntity.ok(usuario);
 		} else {
 			return ResponseEntity.badRequest().body("Credenciais inválidas.");
@@ -171,5 +174,14 @@ public final class restMain {
 		cr.setPdf(pdf.getBytes());
 		return ResponseEntity.accepted().build();
 	}
-
+	
+	@PostMapping("/{curso}/matricular")
+	public String cadastrar(@PathVariable String curso, HttpSession sessao) {
+		Curso curs = serv.cursoDados(curso);
+		Aluno alunso = rep.getbyEmail((String) sessao.getAttribute("email"));
+		rep.Matricular(curs, alunso);
+		return "Matriculado";
+	}
+	
+	
 }

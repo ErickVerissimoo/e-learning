@@ -25,4 +25,7 @@ public interface alunoRepository extends JpaRepository<Aluno, Long>{
 	@Transactional
 	@Query(value ="alter table aluno AUTO_INCREMENT = 1", nativeQuery=true)
 	void resetar();
+	
+	@Query("Select p from Aluno p where p.email=:email")
+	Aluno byemail(@Param("email") String email);
 }

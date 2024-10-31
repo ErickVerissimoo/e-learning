@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.education.learning.model.curso.Curso;
 import com.education.learning.model.superclass.userService;
 
 import jakarta.persistence.EntityExistsException;
@@ -73,5 +75,14 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 	public void apagar() {
 		repo.deleteAll();
 		repo.resetar();
+	}
+	@Transactional
+	public void Matricular(Curso curso, Aluno aluno) {
+		aluno.getCursos().add(curso);
+		repo.save(aluno);
+	}
+	
+	public Aluno getbyEmail(String email) {
+		return repo.byemail(email);
 	}
 }
