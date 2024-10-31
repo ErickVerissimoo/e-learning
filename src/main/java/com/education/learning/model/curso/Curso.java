@@ -2,8 +2,6 @@ package com.education.learning.model.curso;
 
 import java.util.Collection;
 
-import org.springframework.stereotype.Component;
-
 import com.education.learning.model.aluno.Aluno;
 
 import jakarta.persistence.Entity;
@@ -13,10 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Data;
 @Entity
-@Component
 @Data
+@Builder
 @Table(name = "curso")
 public class Curso {
 	@Id

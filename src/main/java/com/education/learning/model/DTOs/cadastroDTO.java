@@ -8,6 +8,6 @@ public class cadastroDTO {
 	private subadminDTO subadmi = null;
 	private alunoDTO aluno = null;
 	private loginGeneric log = null;
-
+	
 
 }

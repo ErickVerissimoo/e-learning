@@ -1,6 +1,5 @@
 package com.education.learning.restcontroller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.education.learning.model.DTOs.alunoDTO;
 import com.education.learning.model.DTOs.cadastroDTO;
+import com.education.learning.model.DTOs.cursoDTO;
 import com.education.learning.model.DTOs.subadminDTO;
 import com.education.learning.model.aluno.Aluno;
 import com.education.learning.model.aluno.alunoService;
@@ -37,7 +38,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Cleanup;
 
 @RestController
 @RequestMapping(value = "/home")
@@ -140,12 +140,11 @@ public final class restMain {
 
 	@PostMapping("/funcionarios/cursoAdd")
 	@ResponseStatus(code = HttpStatus.OK)
-	public String uploadCurso(@RequestParam(name = "file") MultipartFile file)
+	public String uploadCurso(@ModelAttribute cursoDTO curso)
 			throws IllegalStateException, IOException {
-
-		@Cleanup
-		ByteArrayInputStream bites = new ByteArrayInputStream(file.getBytes());
-		serv.gravar(bites.readAllBytes(), new Curso());
+		
+		
+		serv.gravar(Curso.builder().dados(curso.getArquivo().getBytes()).nome(curso.getNome()).build());
 
 		return "Curso salvo";
 	}
