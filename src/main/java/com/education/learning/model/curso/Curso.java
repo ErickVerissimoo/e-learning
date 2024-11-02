@@ -18,11 +18,13 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 @Entity
 @Data
 @Builder
 @Table(name = "curso")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Curso {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -195,7 +195,7 @@ public final class restMain {
 	}
 	@PostMapping("/{curso}/avaliar")
 	public String avaliar(@PathVariable(value = "curso") String nome, HttpSession sessao, @RequestBody avaliarDTO avaliacao ) {
-		Avaliacao avaliarcao = Avaliacao.builder().aluno(rep.getbyEmail((String)sessao.getAttribute("email"))).comentario(avaliacao.comentario).nota(avaliacao.avaliacao).build();
+		Avaliacao avaliarcao = Avaliacao.builder().aluno(rep.getbyEmail((String)sessao.getAttribute("email"))).comentario(avaliacao.comentario).nota(avaliacao.avaliacao).curso(serv.cursoDados(nome)).build();
 		ava.avaliar(avaliarcao);
 		return "avaliado";
 	}
