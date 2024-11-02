@@ -12,4 +12,5 @@ public interface cursoRepository extends JpaRepository<Curso, Long>{
 	List<Curso> findAllbyName(@Param("nome") String nome);
 	@Query("Select p from Curso p Where p.nome=:nome")
 	Curso findByName (@Param("nome") String nome);
+	
 }

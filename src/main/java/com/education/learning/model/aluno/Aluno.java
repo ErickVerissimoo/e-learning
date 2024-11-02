@@ -2,6 +2,9 @@ package com.education.learning.model.aluno;
 
 import java.util.Set;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.education.learning.model.curso.Curso;
 import com.education.learning.model.superclass.Usuario;
 
@@ -19,6 +22,8 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @SuperBuilder
 @Table(name = "aluno")
+@DynamicInsert
+@DynamicUpdate
 @NoArgsConstructor
 public final class Aluno extends Usuario {
 

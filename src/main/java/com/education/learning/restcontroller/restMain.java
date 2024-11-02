@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,8 @@ import com.education.learning.model.DTOs.cursoDTO;
 import com.education.learning.model.DTOs.subadminDTO;
 import com.education.learning.model.aluno.Aluno;
 import com.education.learning.model.aluno.alunoService;
+import com.education.learning.model.avaliacao.Avaliacao;
+import com.education.learning.model.avaliacao.avaliacaoService;
 import com.education.learning.model.curso.Curso;
 import com.education.learning.model.curso.cursoService;
 import com.education.learning.model.subadmin.Subadmin;
@@ -50,9 +53,11 @@ public final class restMain {
 	private cursoService serv;
 	@Autowired
 	private subadminService sub;
-
+	@Autowired
+	private avaliacaoService ava;
+	
 	@PostMapping(value = { "/cadastrar", "/colaborador/cadastrar" }, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public final ResponseEntity<String> Adicionar(@RequestBody cadastroDTO cadastro, HttpServletRequest requisicao) {
+	public final ResponseEntity<String> Adicionar(@RequestBody @Validated cadastroDTO cadastro, HttpServletRequest requisicao) {
 
 		alunoDTO alunus = cadastro.getAluno();
 		subadminDTO subDTO = cadastro.getSubadmi();
@@ -132,7 +137,7 @@ public final class restMain {
 		}
 	}
 
-	@GetMapping(value = "/verTodos", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = {"/verTodos"}, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.ACCEPTED)
 	public List<Aluno> alunos() {
 		return rep.getAll();
@@ -155,7 +160,7 @@ public final class restMain {
 		return serv.cursoDados(nome);
 	}
 
-	@GetMapping("*/procurar")
+	@GetMapping("/procurar")
 	@ResponseStatus(code = HttpStatus.FOUND)
 	public List<Curso> procura(@NotBlank @RequestParam(name = "nome") String nome) {
 		return serv.procura(nome);
@@ -176,7 +181,7 @@ public final class restMain {
 	}
 
 	@PostMapping("/{curso}/matricular")
-	public String cadastrar(@PathVariable String curso, HttpSession sessao) {
+	public String cadastrar(@PathVariable(name = "curso") String curso, HttpSession sessao) {
 		Curso curs = serv.cursoDados(curso);
 		Aluno alunso = rep.getbyEmail((String) sessao.getAttribute("email"));
 		rep.Matricular(curs, alunso);
@@ -188,4 +193,11 @@ public final class restMain {
 		sessao.invalidate();
 		return "Usuario deslogado com sucesso";
 	}
+	@PostMapping("/{curso}/avaliar")
+	public String avaliar(@PathVariable(value = "curso") String nome, HttpSession sessao, @RequestBody avaliarDTO avaliacao ) {
+		Avaliacao avaliarcao = Avaliacao.builder().aluno(rep.getbyEmail((String)sessao.getAttribute("email"))).comentario(avaliacao.comentario).nota(avaliacao.avaliacao).build();
+		ava.avaliar(avaliarcao);
+		return "avaliado";
+	}
+	protected record avaliarDTO(String comentario, int avaliacao) {}
 }

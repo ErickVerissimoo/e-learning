@@ -28,12 +28,13 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 
 	@Override
 	public void Cadastrar(Aluno aluno)  {
-		if(repo.exists(aluno.getEmail(), aluno.getNome())!=null) {
+		if(repo.findByEmail(aluno.getEmail()) !=null) {
 			throw new EntityExistsException("Aluno já cadastrado");
 		}
+		
 		String identificador = this.gerarIdentificador();
 		aluno.setIdentificacao(identificador);
-		repo.save(aluno);
+		repo.saveAndFlush(aluno);
 	}
 
 
@@ -64,7 +65,7 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 	@Override
 	public Aluno entrar(String email, String senha, String nome) {
 		Optional<Aluno> teste = Optional.of(repo.Validar(email, senha, nome));
-
+		
 		return teste.orElseThrow();
 	}
 	@Override
@@ -83,6 +84,6 @@ public void Atualizar(Aluno atualizar)  throws EntityNotFoundException{
 	}
 	
 	public Aluno getbyEmail(String email) {
-		return repo.byemail(email);
+		return repo.findByEmail(email);
 	}
 }

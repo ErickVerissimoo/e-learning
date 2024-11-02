@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
+
 
 @Repository
 public interface alunoRepository extends JpaRepository<Aluno, Long>{
@@ -19,13 +21,13 @@ public interface alunoRepository extends JpaRepository<Aluno, Long>{
 	@Query("update Aluno p SET p.email = :email, p.senha=:senha where p.id = :id")
 	void Update(@Param("email") String email, @Param("senha") String senha, @Param("id") long id);
 	
-	@Query("Select p from Aluno p where p.email=:email or p.nome=:nome")
-	Aluno exists (@Param("email") String email, @Param("nome") String nome);
+	
 	@Modifying
 	@Transactional
 	@Query(value ="alter table aluno AUTO_INCREMENT = 1", nativeQuery=true)
 	void resetar();
 	
-	@Query("Select p from Aluno p where p.email=:email")
-	Aluno byemail(@Param("email") String email);
+	Aluno findByEmail(String email);
+	
+
 }
