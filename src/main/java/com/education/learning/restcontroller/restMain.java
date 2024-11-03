@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.education.learning.model.DTOs.alunoDTO;
@@ -35,6 +36,7 @@ import com.education.learning.model.curso.cursoService;
 import com.education.learning.model.subadmin.Subadmin;
 import com.education.learning.model.subadmin.subadminService;
 import com.education.learning.model.superclass.Usuario;
+
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -85,17 +87,17 @@ public final class restMain {
 	@DeleteMapping(value = { "/usuario/deletar", "/funcionarios/deletar" }, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public final ResponseEntity<String> deleletar(@RequestParam(name = "id") String id, HttpServletRequest req) {
 
-		if (req.getRequestURI().equals("/usuario/deletar")) {
+		if (req.getRequestURI().equals("/usuario/deletar")) 
 			rep.Deletar(id);
-		} else if (req.getRequestURI().equals("/restrito/funcionario/deletar")) {
+		else if (req.getRequestURI().equals("/restrito/funcionario/deletar")) 
 			sub.Deletar(id);
-		}
+		
 
 		else {
 			return new ResponseEntity<>("ID inválido ou não encontrado",
 					ResponseEntity.badRequest().build().getStatusCode());
-
 		}
+		
 
 		return new ResponseEntity<>("Usuario deletado", ResponseEntity.ok("Deletado").getStatusCode());
 	}
@@ -162,7 +164,9 @@ public final class restMain {
 
 	@GetMapping("/procurar")
 	@ResponseStatus(code = HttpStatus.FOUND)
-	public List<Curso> procura(@NotBlank @RequestParam(name = "nome") String nome) {
+	public List<Curso> procura(@NotBlank 
+			@RequestParam(name = "nome") 
+	String nome) {
 		return serv.procura(nome);
 	}
 
@@ -173,17 +177,22 @@ public final class restMain {
 	}
 
 	@PostMapping("/funcionarios/{curso}/adicionarCert")
-	public ResponseEntity<String> addCertificado(@PathVariable(name = "curso", required = true) String curs,
-			@RequestParam(name = "arq", required = true) @NotNull MultipartFile pdf) throws IOException {
+	public ResponseEntity<String> addCertificado(
+			@PathVariable(name = "curso", required = true)
+			String curs,
+			@RequestParam(name = "arq", required = true)
+			@NotNull MultipartFile pdf) 
+					throws IOException {
 		Curso cr = serv.cursoDados(curs);
 		cr.setPdf(pdf.getBytes());
 		return ResponseEntity.accepted().build();
 	}
 
 	@PostMapping("/{curso}/matricular")
-	public String cadastrar(@PathVariable(name = "curso") String curso, HttpSession sessao) {
+	public String cadastrar(@PathVariable(name = "curso")
+	String curso, @SessionAttribute(name = "email") String nome) {
 		Curso curs = serv.cursoDados(curso);
-		Aluno alunso = rep.getbyEmail((String) sessao.getAttribute("email"));
+		Aluno alunso = rep.getbyEmail(nome);
 		rep.Matricular(curs, alunso);
 		return "Matriculado";
 	}
@@ -193,10 +202,20 @@ public final class restMain {
 		sessao.invalidate();
 		return "Usuario deslogado com sucesso";
 	}
+	
 	@PostMapping("/{curso}/avaliar")
-	public String avaliar(@PathVariable(value = "curso") String nome, HttpSession sessao, @RequestBody avaliarDTO avaliacao ) {
-		Avaliacao avaliarcao = Avaliacao.builder().aluno(rep.getbyEmail((String)sessao.getAttribute("email"))).comentario(avaliacao.comentario).nota(avaliacao.avaliacao).curso(serv.cursoDados(nome)).build();
+	public String avaliar(@PathVariable(value = "curso") String nome, 
+			HttpSession sessao, 
+			@RequestBody avaliarDTO avaliacao ) {
+		Avaliacao avaliarcao = Avaliacao.builder().
+				aluno(rep.getbyEmail((String)sessao.
+				getAttribute("email"))).
+				comentario(avaliacao.comentario).
+				nota(avaliacao.avaliacao).
+				curso(serv.cursoDados(nome))
+				.build();
 		ava.avaliar(avaliarcao);
+		
 		return "avaliado";
 	}
 	protected record avaliarDTO(String comentario, int avaliacao) {}
